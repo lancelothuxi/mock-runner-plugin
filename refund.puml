@@ -1,0 +1,48 @@
+@startuml
+skinparam theme plain
+skinparam swimlaneWidth auto
+
+title 退款业务状态流转 - 循环逻辑优化版
+
+|风控 (Risk)|
+start
+:INIT 初始化;
+:WAIT_RISK_AUDIT 待风控审核;
+
+if (风控自建系统审核) then (审核中)
+    :RISK_AUDITING 风控审核中;
+    if (审核结果) then (审核失败)
+        :RISK_REFUSE 风控驳回;
+        stop
+    else (通过)
+        |合规 (Compliance)|
+        :WAIT_COMPLIANCE_CONFIRM 待合规确认;
+
+        if (是否为第三方机构/企业入账?) then (需要提交)
+            |用户 (User)|
+            ' 开始循环体
+            repeat
+                :WAIT_COMPLETE_INFO 待收集资料;
+                note right
+                  提交入金凭证、提供sender iban信息
+                end note
+                :用户上传资料;
+
+                |合规 (Compliance)|
+                :审核资料有效性;
+            ' 如果不能明确识别，则通过 backward 连线流转回用户
+            backward:无法明确识别/资料失败;
+            repeat while (能否明确识别实际付款人?) is (不能明确识别)
+            :识别成功;
+        else (不需要提交)
+            ' 直接向下走
+        endif
+        |合规 (Compliance)|
+        :COMPLIANCE_CONFIRM 合规确认并生成退款单;
+        :调用渠道退款接口;
+        :FINANCE_PASS 退款成功;
+        stop
+    endif
+endif
+
+@enduml
