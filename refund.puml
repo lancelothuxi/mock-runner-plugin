@@ -50,12 +50,12 @@ Payin -> Payin: 初始化退款单(status=INIT)
 group 风控准入审核
   Payin -> Payin: (status=WAIT_RISK_AUDIT)
   Payin -> Risk++: 发起风险评估
-  Payin -> Payin: (status=RISK_AUDIT_ING)
+  Payin -> Payin: 等待风控审核结果(status=RISK_AUDIT_ING)
 
   alt 审核通过
-    Risk --> Payin: <color:green>通过</color>
+    Risk --> Payin: <color:green>通过</color>审批通过,流转到合规处理 (status=WAIT_COMPLIANCE_CONFIRM)
   else 审核失败
-    Risk --> Payin: <color:red>驳回</color>
+    Risk --> Payin: <color:red>风控驳回</color> (status=RISK_REFUSE, <color:red>refund_status=FAIL) 风控驳回,退款失败
     User++
     Payin --> User--: <color:red>退款失败</color>
     User--
@@ -67,11 +67,11 @@ deactivate Payin
 ||40||
 
 group 合规性核验
-  Payin -> Payin++: (status=WAIT_COMPLIANCE)
-  Payin -> Compliance: 提交凭证/确认来源
+  Payin -> Compliance++: 提交凭证/确认来源
 
-  alt 场景 A：需补充凭证
-    Compliance --> Payin: 待补件
+  alt 场景 A：第三方机构/企业
+    Compliance --> Payin++: (status=WAIT_CONFIRM_SENDER_INFO 待确认实际付款人信息)
+    Compliance--
     Payin --> User++: 通知上传凭证
     User --[#blue]> Payin: 用户上传
     User--
@@ -84,11 +84,11 @@ group 合规性核验
         User --[#blue]> Payin: 再次提交
         User--
       else 通过
-        Compliance --> Payin: <color:green>明确付款人</color>
+        Compliance --> Payin: <color:green>明确付款人</color>(status=COMPLIANCE_CONFIRM) 合规确认通过
       end
     end
   else 场景 B：个人直退
-    Compliance --> Payin: <color:green>校验通过</color>
+    Compliance --> Payin: <color:green>校验通过</color> (status=COMPLIANCE_CONFIRM) 合规确认通过
   end
   Compliance--
   Payin--
