@@ -98,17 +98,16 @@ end
 
 group 渠道下发执行
   loop 渠道重试
-    Payin -> Payin++: (status=CHANNEL_PROCESS)
-    Payin -> Channel++: 调用退款接口
+    Payin++
+    Payin -> Channel++: 调用payRefundOrderService.payOut()处理出款
 
     alt 成功
-      Channel --> Payin: <color:green>SUCCESS</color>
+      Channel --> Payin: <color:green>渠道受理成功 refund_status=SUCCESS 退款成功</color>
       User++
       Payin --> User: <color:green>成功通知</color>
       User--
     else 失败
-      Channel --> Payin: <color:red>FAILED</color>
-
+      Channel --> Payin: <color:red>渠道处理失败</color>
       alt 内部错误
         Payin -> Ops++: 技术处理
         Ops --> Payin: <color:green>修复完成</color>
