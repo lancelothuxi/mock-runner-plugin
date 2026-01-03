@@ -1,48 +1,139 @@
 @startuml
-skinparam theme plain
-skinparam swimlaneWidth auto
+!pragma teoz true
 
-title 退款业务状态流转 - 循环逻辑优化版
+skinparam sequenceGroupHeaderFontStyle plain
+skinparam sequence {
+  LifeLineBorderColor #0a14a4ff
+  LifeLineBorderThickness 2
+  LifeLineBackgroundColor #116599ff
+  ParticipantBorderColor #A0B4C8
+  ParticipantBackgroundColor #A0B4C8
+  GroupHeaderFontSize 10
+  GroupBorderColor #f00817ff
+  GroupBorderThickness 0.5
+}
 
-|风控 (Risk)|
-start
-:INIT 初始化;
-:WAIT_RISK_AUDIT 待风控审核;
+skinparam sequenceGroupFontSize 10
+skinparam SequenceGroupFontStyle plain
+skinparam sequenceGroupHeaderFontSize 10
 
-if (风控自建系统审核) then (审核中)
-    :RISK_AUDITING 风控审核中;
-    if (审核结果) then (审核失败)
-        :RISK_REFUSE 风控驳回;
-        stop
-    else (通过)
-        |合规 (Compliance)|
-        :WAIT_COMPLIANCE_CONFIRM 待合规确认;
 
-        if (是否为第三方机构/企业入账?) then (需要提交)
-            |用户 (User)|
-            ' 开始循环体
-            repeat
-                :WAIT_COMPLETE_INFO 待收集资料;
-                note right
-                  提交入金凭证、提供sender iban信息
-                end note
-                :用户上传资料;
+skinparam Arrow {
+  color #0e0f0fff
+  thickness 1
+  fontColor #5E6C84
+}
 
-                |合规 (Compliance)|
-                :审核资料有效性;
-            ' 如果不能明确识别，则通过 backward 连线流转回用户
-            backward:无法明确识别/资料失败;
-            repeat while (能否明确识别实际付款人?) is (不能明确识别)
-            :识别成功;
-        else (不需要提交)
-            ' 直接向下走
-        endif
-        |合规 (Compliance)|
-        :COMPLIANCE_CONFIRM 合规确认并生成退款单;
-        :调用渠道退款接口;
-        :FINANCE_PASS 退款成功;
-        stop
-    endif
-endif
+skinparam Note {
+  backgroundColor #E6F0FF
+  borderColor #A4C6FF
+  fontColor #1F2328
+  roundCorner 6
+}
+
+participant "用户" as User
+participant "PayIn" as Payin
+participant "风控(RISK)" as Risk
+participant "合规(COMPLIANCE)" as Compliance
+participant "支付渠道(CHANNEL)" as Channel
+participant "技术、运营" as Ops
+
+autonumber
+
+activate User
+User -> Payin: 提交退款请求
+deactivate User
+
+activate Payin
+Payin -> Payin: 初始化退款单(status=INIT)
+
+group 风控准入审核
+  Payin -> Payin: (status=WAIT_RISK_AUDIT)
+  Payin -> Risk++: 发起风险评估
+  Payin -> Payin: (status=RISK_AUDIT_ING)
+
+  alt 审核通过
+    Risk --> Payin: <color:green>通过</color>
+  else 审核失败
+    Risk --> Payin: <color:red>驳回</color>
+    User++
+    Payin --> User--: <color:red>退款失败</color>
+    User--
+  end
+    Risk--
+end
+deactivate Payin
+
+||40||
+
+group 合规性核验
+  Payin -> Payin++: (status=WAIT_COMPLIANCE)
+  Payin -> Compliance: 提交凭证/确认来源
+
+  alt 场景 A：需补充凭证
+    Compliance --> Payin: 待补件
+    Payin --> User++: 通知上传凭证
+    User --[#blue]> Payin: 用户上传
+    User--
+
+    loop 补件审核循环
+      Payin -> Compliance++: 提交核验
+      alt 失败
+        Compliance --> Payin: <color:red>驳回</color>
+        Payin --> User++: <color:red>重新上传</color>
+        User --[#blue]> Payin: 再次提交
+        User--
+      else 通过
+        Compliance --> Payin: <color:green>明确付款人</color>
+      end
+    end
+  else 场景 B：个人直退
+    Compliance --> Payin: <color:green>校验通过</color>
+  end
+  Compliance--
+  Payin--
+end
+
+||40||
+
+group 渠道下发执行
+  loop 渠道重试
+    Payin -> Payin++: (status=CHANNEL_PROCESS)
+    Payin -> Channel++: 调用退款接口
+
+    alt 成功
+      Channel --> Payin: <color:green>SUCCESS</color>
+      User++
+      Payin --> User: <color:green>成功通知</color>
+      User--
+    else 失败
+      Channel --> Payin: <color:red>FAILED</color>
+
+      alt 内部错误
+        Payin -> Ops++: 技术处理
+        Ops --> Payin: <color:green>修复完成</color>
+        Ops--
+      else 外部错误
+        alt 明确错误码
+             Payin -> User++: 重新收集材料
+             User --[#blue]> Payin: 提交材料
+             User--
+             Payin-> Channel: 重新调用退款接口
+             Channel--
+        else 未知错误码
+            Payin --> Ops: 和渠道确认处理方案
+            Ops++
+            Ops--
+            User--
+        end
+
+      end
+    end
+    Channel--
+  end
+  Payin--
+end
+
+deactivate Payin
 
 @enduml
