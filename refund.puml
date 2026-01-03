@@ -116,6 +116,7 @@ group 渠道下发执行
         alt 明确错误码
              Payin -> User++: (status=WAIT_COMPLETE_INFO) 待用户提交收款账户信息
              User --[#blue]> Payin: 提交收款账户信息
+             Payin -> Payin: 账户信息格式校验(iban信息等)
              User--
              Payin-> Channel: 重新调用退款接口
              Channel--
