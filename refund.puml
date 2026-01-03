@@ -115,8 +115,8 @@ group 渠道下发执行
         Ops--
       else 外部错误
         alt 明确错误码
-             Payin -> User++: 重新收集材料
-             User --[#blue]> Payin: 提交材料
+             Payin -> User++: (status=WAIT_COMPLETE_INFO) 待用户提交收款账户信息
+             User --[#blue]> Payin: 提交收款账户信息
              User--
              Payin-> Channel: 重新调用退款接口
              Channel--
