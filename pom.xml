@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>my-idea-plugin</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>My Custom Runner Plugin</name>
+    <description>A plugin that adds custom Run/Debug configurations similar to JProfiler</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <idea.version>2022.3</idea.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>intellij-repository</id>
+            <url>https://www.jetbrains.com/intellij-repository/releases</url>
+        </repository>
+        <repository>
+            <id>intellij-third-party-dependencies</id>
+            <url>https://cache-redirector.jetbrains.com/intellij-dependencies</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- IntelliJ IDEA 插件开发依赖 -->
+        <!-- 需要在 IDEA 中配置 IntelliJ Platform Plugin SDK -->
+        <!-- 或者手动添加 IDEA 安装目录下的 jar 文件作为依赖 -->
+        
+        <!-- 如果你的 IDEA 安装在 /path/to/idea，可以添加以下系统依赖： -->
+        <!--
+        <dependency>
+            <groupId>com.jetbrains</groupId>
+            <artifactId>idea</artifactId>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>/path/to/idea/lib/idea.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.jetbrains</groupId>
+            <artifactId>openapi</artifactId>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>/path/to/idea/lib/openapi.jar</systemPath>
+        </dependency>
+        -->
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Assembly Plugin for packaging -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/plugin-assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

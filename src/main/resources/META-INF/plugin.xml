@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>com.example.myplugin</id>
+    <name>My Custom Runner Plugin</name>
+    <vendor email="support@example.com" url="https://www.example.com">Example Company</vendor>
+    
+    <description><![CDATA[
+        A plugin that adds custom Run/Debug configurations similar to JProfiler.
+        Allows you to run or debug applications with custom settings.
+    ]]></description>
+    
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- 注册自定义配置类型 -->
+        <configurationType implementation="com.example.plugin.MyConfigurationType"/>
+        
+        <!-- 注册自定义程序运行器 -->
+        <programRunner implementation="com.example.plugin.MyProgramRunner"/>
+    </extensions>
+</idea-plugin>
