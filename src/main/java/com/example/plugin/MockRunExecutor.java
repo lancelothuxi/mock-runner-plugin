@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class MyCustomExecutor extends Executor {
+public class MockRunExecutor extends Executor {
     public static final String EXECUTOR_ID = "MyCustomExecutor";
     
     @Override

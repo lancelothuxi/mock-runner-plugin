@@ -2,7 +2,7 @@ package com.example.plugin;
 
 import com.example.plugin.mock.MockConfig;
 import com.example.plugin.service.MockConfigService;
-import com.example.plugin.ui.MyRunnerToolWindowContent;
+import com.example.plugin.ui.MockRunnerToolWindowContent;
 import com.google.gson.Gson;
 import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.ExecutionException;
@@ -27,9 +27,9 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyDebugProgramRunner extends GenericDebuggerRunner {
+public class MockDebugRunner extends GenericDebuggerRunner {
     
-    private static final Logger LOG = Logger.getInstance(MyDebugProgramRunner.class);
+    private static final Logger LOG = Logger.getInstance(MockDebugRunner.class);
     private static final String RUNNER_ID = "MyDebugProgramRunner";
 
     @NotNull
@@ -42,9 +42,9 @@ public class MyDebugProgramRunner extends GenericDebuggerRunner {
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
         LOG.info("canRun called - executorId: " + executorId + 
                  ", profile: " + profile.getClass().getName() + 
-                 ", MyDebugExecutor.EXECUTOR_ID: " + MyDebugExecutor.EXECUTOR_ID);
+                 ", MockDebugExecutor.EXECUTOR_ID: " + MockDebugExecutor.EXECUTOR_ID);
         
-        boolean isMyExecutor = MyDebugExecutor.EXECUTOR_ID.equals(executorId);
+        boolean isMyExecutor = MockDebugExecutor.EXECUTOR_ID.equals(executorId);
         boolean isAppConfig = profile instanceof ApplicationConfiguration;
         
         LOG.info("isMyExecutor: " + isMyExecutor + ", isAppConfig: " + isAppConfig);
@@ -99,7 +99,7 @@ public class MyDebugProgramRunner extends GenericDebuggerRunner {
 
         // 记录到 ToolWindow
         ApplicationManager.getApplication().invokeLater(() -> {
-            MyRunnerToolWindowContent content = environment.getProject().getService(MyRunnerToolWindowContent.class);
+            MockRunnerToolWindowContent content = environment.getProject().getService(MockRunnerToolWindowContent.class);
             if (content != null) {
                 content.addResult(startTime, methodName, "Debugging", "-");
             }

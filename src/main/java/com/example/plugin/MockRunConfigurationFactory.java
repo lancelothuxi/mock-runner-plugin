@@ -6,9 +6,9 @@ import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
-public class MyRunConfigurationFactory extends ConfigurationFactory {
+public class MockRunConfigurationFactory extends ConfigurationFactory {
     
-    protected MyRunConfigurationFactory(@NotNull ConfigurationType type) {
+    protected MockRunConfigurationFactory(@NotNull ConfigurationType type) {
         super(type);
     }
 
@@ -21,6 +21,6 @@ public class MyRunConfigurationFactory extends ConfigurationFactory {
     @NotNull
     @Override
     public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
-        return new MyRunConfiguration(project, this, "My Custom Run");
+        return new MockRunConfiguration(project, this, "Mock Custom Run");
     }
 }

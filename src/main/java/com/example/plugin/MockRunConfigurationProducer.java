@@ -8,16 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 
-public class MyRunConfigurationProducer extends LazyRunConfigurationProducer<MyRunConfiguration> {
+public class MockRunConfigurationProducer extends LazyRunConfigurationProducer<MockRunConfiguration> {
     
     @NotNull
     @Override
     public ConfigurationFactory getConfigurationFactory() {
-        return new MyRunConfigurationFactory(new MyConfigurationType());
+        return new MockRunConfigurationFactory(new MockRunnerConfigurationType());
     }
     
     @Override
-    protected boolean setupConfigurationFromContext(@NotNull MyRunConfiguration configuration,
+    protected boolean setupConfigurationFromContext(@NotNull MockRunConfiguration configuration,
                                                       @NotNull ConfigurationContext context,
                                                       @NotNull Ref<PsiElement> sourceElement) {
         PsiElement element = context.getPsiLocation();
@@ -37,7 +37,7 @@ public class MyRunConfigurationProducer extends LazyRunConfigurationProducer<MyR
     }
     
     @Override
-    public boolean isConfigurationFromContext(@NotNull MyRunConfiguration configuration,
+    public boolean isConfigurationFromContext(@NotNull MockRunConfiguration configuration,
                                                 @NotNull ConfigurationContext context) {
         PsiElement element = context.getPsiLocation();
         if (element == null) {

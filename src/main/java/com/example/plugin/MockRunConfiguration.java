@@ -17,28 +17,28 @@ public class MockRunConfiguration extends RunConfigurationBase<RunProfileState> 
     
     private String myCustomParameter = "";
 
-    protected MyRunConfiguration(@NotNull Project project, 
-                                 @NotNull ConfigurationFactory factory, 
-                                 @NotNull String name) {
+    protected MockRunConfiguration(@NotNull Project project, 
+                                   @NotNull ConfigurationFactory factory, 
+                                   @NotNull String name) {
         super(project, factory, name);
     }
 
     @NotNull
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new SettingsEditor<MyRunConfiguration>() {
+        return new SettingsEditor<MockRunConfiguration>() {
             private JPanel panel;
             private JTextField parameterField;
 
             @Override
-            protected void resetEditorFrom(@NotNull MyRunConfiguration config) {
+            protected void resetEditorFrom(@NotNull MockRunConfiguration config) {
                 if (parameterField != null) {
                     parameterField.setText(config.getCustomParameter());
                 }
             }
 
             @Override
-            protected void applyEditorTo(@NotNull MyRunConfiguration config) {
+            protected void applyEditorTo(@NotNull MockRunConfiguration config) {
                 if (parameterField != null) {
                     config.setCustomParameter(parameterField.getText());
                 }

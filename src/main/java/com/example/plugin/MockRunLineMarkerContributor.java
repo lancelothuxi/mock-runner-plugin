@@ -10,7 +10,7 @@ import com.intellij.psi.PsiModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MyRunLineMarkerContributor extends RunLineMarkerContributor {
+public class MockRunLineMarkerContributor extends RunLineMarkerContributor {
     
     @Override
     public @Nullable Info getInfo(@NotNull PsiElement element) {

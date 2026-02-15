@@ -33,6 +33,6 @@ public class MockRunnerConfigurationType implements ConfigurationType {
 
     @Override
     public ConfigurationFactory[] getConfigurationFactories() {
-        return new ConfigurationFactory[]{new MyRunConfigurationFactory(this)};
+        return new ConfigurationFactory[]{new MockRunConfigurationFactory(this)};
     }
 }

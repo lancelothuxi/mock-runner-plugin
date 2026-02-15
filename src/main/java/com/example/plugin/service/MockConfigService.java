@@ -2,7 +2,7 @@ package com.example.plugin.service;
 
 import com.example.plugin.mock.MockConfig;
 import com.example.plugin.mock.MockMethodConfig;
-import com.example.plugin.ui.MyRunnerToolWindowContent;
+import com.example.plugin.ui.MockRunnerToolWindowContent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
@@ -28,6 +28,19 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
     public MockConfigService(Project project) {
         this.project = project;
         this.mockConfig = new MockConfig();
+    }
+    
+    public static MockConfigService getInstance(Project project) {
+        return project.getService(MockConfigService.class);
+    }
+    
+    public MockConfig getConfig() {
+        return mockConfig;
+    }
+    
+    public void saveConfig() {
+        // 触发状态保存
+        // IntelliJ会自动调用getState()来保存状态
     }
     
     // 持久化状态类
@@ -71,17 +84,9 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
     private void updateToolWindowFromConfig() {
         // 延迟更新 UI，确保 ToolWindow 已经初始化
         com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater(() -> {
-            MyRunnerToolWindowContent toolWindow = project.getService(MyRunnerToolWindowContent.class);
+            MockRunnerToolWindowContent toolWindow = project.getService(MockRunnerToolWindowContent.class);
             if (toolWindow != null) {
-                toolWindow.clearResults();
-                for (MockMethodConfig method : mockConfig.getMockMethods()) {
-                    toolWindow.addMockMethod(
-                        method.getClassName(),
-                        method.getMethodName(),
-                        method.getSignature(),
-                        method.getReturnValue()
-                    );
-                }
+                toolWindow.refresh();
                 LOG.info("Updated ToolWindow with " + mockConfig.getMockMethods().size() + " mock methods");
             }
         });
@@ -101,13 +106,13 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
         // 确保 ToolWindow 可见
         com.intellij.openapi.wm.ToolWindowManager toolWindowManager = 
             com.intellij.openapi.wm.ToolWindowManager.getInstance(project);
-        com.intellij.openapi.wm.ToolWindow toolWindow = toolWindowManager.getToolWindow("My Runner");
+        com.intellij.openapi.wm.ToolWindow toolWindow = toolWindowManager.getToolWindow("Mock Runner");
         if (toolWindow != null && !toolWindow.isVisible()) {
             toolWindow.show();
         }
         
         // 更新 UI
-        MyRunnerToolWindowContent toolWindowContent = project.getService(MyRunnerToolWindowContent.class);
+        MockRunnerToolWindowContent toolWindowContent = project.getService(MockRunnerToolWindowContent.class);
         LOG.info("ToolWindow instance: " + toolWindowContent);
         
         if (toolWindowContent != null) {
@@ -125,7 +130,7 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
         mockConfig.removeMockMethod(className, methodName);
         
         // 更新 UI
-        MyRunnerToolWindowContent toolWindow = project.getService(MyRunnerToolWindowContent.class);
+        MockRunnerToolWindowContent toolWindow = project.getService(MockRunnerToolWindowContent.class);
         if (toolWindow != null) {
             toolWindow.refresh();
         }
@@ -142,7 +147,7 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
         mockConfig.clearAll();
         
         // 更新 UI
-        MyRunnerToolWindowContent toolWindow = project.getService(MyRunnerToolWindowContent.class);
+        MockRunnerToolWindowContent toolWindow = project.getService(MockRunnerToolWindowContent.class);
         if (toolWindow != null) {
             toolWindow.clearResults();
         }

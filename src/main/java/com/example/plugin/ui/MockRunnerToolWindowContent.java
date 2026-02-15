@@ -1,50 +1,97 @@
 package com.example.plugin.ui;
 
+import com.example.plugin.mock.MockConfig;
+import com.example.plugin.mock.MockMethodConfig;
+import com.example.plugin.service.MockConfigService;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.components.JBTextField;
 import com.intellij.ui.table.JBTable;
+import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MyRunnerToolWindowContent {
+public class MockRunnerToolWindowContent {
     private final Project project;
     private final JPanel contentPanel;
     private final JBTable mockTable;
-    private final DefaultTableModel tableModel;
+    private final MockTableModel tableModel;
     private final JLabel statsLabel;
+    private final JBTextField searchField;
+    private final TableRowSorter<MockTableModel> sorter;
     
-    public MyRunnerToolWindowContent(Project project) {
+    // 分页相关
+    private final int PAGE_SIZE = 20;
+    private int currentPage = 0;
+    private final JLabel pageLabel;
+    private final JButton prevButton;
+    private final JButton nextButton;
+    
+    // 全局enable/disable
+    private boolean globalEnabled = true;
+    private final JButton globalToggleButton;
+    
+    public MockRunnerToolWindowContent(Project project) {
         this.project = project;
         contentPanel = new JPanel(new BorderLayout());
         
-        // 创建表格，列：Class, Method, Args, Return Value
-        String[] columnNames = {"Class", "Method", "Args", "Return Value"};
-        tableModel = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // 表格只读
-            }
-        };
-        
+        // 创建自定义表格模型
+        tableModel = new MockTableModel();
         mockTable = new JBTable(tableModel);
         mockTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         
         // 设置列宽
-        mockTable.getColumnModel().getColumn(0).setPreferredWidth(200); // Class
-        mockTable.getColumnModel().getColumn(1).setPreferredWidth(150); // Method
-        mockTable.getColumnModel().getColumn(2).setPreferredWidth(150); // Args
-        mockTable.getColumnModel().getColumn(3).setPreferredWidth(200); // Return Value
+        mockTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // Enabled
+        mockTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Class
+        mockTable.getColumnModel().getColumn(2).setPreferredWidth(150); // Method
+        mockTable.getColumnModel().getColumn(3).setPreferredWidth(150); // Args
+        mockTable.getColumnModel().getColumn(4).setPreferredWidth(200); // Return Value
+        
+        // 设置排序和过滤
+        sorter = new TableRowSorter<>(tableModel);
+        mockTable.setRowSorter(sorter);
         
         JBScrollPane scrollPane = new JBScrollPane(mockTable);
         contentPanel.add(scrollPane, BorderLayout.CENTER);
         
-        // 添加工具栏
+        // 创建顶部工具栏
+        JPanel topPanel = new JPanel(new BorderLayout());
+        
+        // 搜索栏
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        searchPanel.add(new JLabel("Search:"));
+        searchField = new JBTextField(20);
+        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { filterTable(); }
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { filterTable(); }
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { filterTable(); }
+        });
+        searchPanel.add(searchField);
+        
+        // 全局开关
+        globalToggleButton = new JButton("Disable All");
+        globalToggleButton.addActionListener(e -> toggleGlobalEnabled());
+        searchPanel.add(Box.createHorizontalStrut(20));
+        searchPanel.add(globalToggleButton);
+        
+        topPanel.add(searchPanel, BorderLayout.NORTH);
+        
+        // 工具栏
         JPanel toolbarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
         JButton clearButton = new JButton("Clear All");
-        clearButton.addActionListener(e -> clearResults());
+        clearButton.addActionListener(e -> clearAllWithConfirm());
         
         JButton refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(e -> refresh());
@@ -56,38 +103,145 @@ public class MyRunnerToolWindowContent {
         toolbarPanel.add(Box.createHorizontalStrut(20));
         toolbarPanel.add(statsLabel);
         
-        contentPanel.add(toolbarPanel, BorderLayout.NORTH);
+        topPanel.add(toolbarPanel, BorderLayout.SOUTH);
+        contentPanel.add(topPanel, BorderLayout.NORTH);
+        
+        // 分页控制栏
+        JPanel paginationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        prevButton = new JButton("Previous");
+        nextButton = new JButton("Next");
+        pageLabel = new JLabel("Page 1");
+        
+        prevButton.addActionListener(e -> previousPage());
+        nextButton.addActionListener(e -> nextPage());
+        
+        paginationPanel.add(prevButton);
+        paginationPanel.add(Box.createHorizontalStrut(10));
+        paginationPanel.add(pageLabel);
+        paginationPanel.add(Box.createHorizontalStrut(10));
+        paginationPanel.add(nextButton);
+        
+        contentPanel.add(paginationPanel, BorderLayout.SOUTH);
+        
+        // 初始化数据
+        loadMockConfigs();
+        updatePaginationControls();
     }
     
     public JPanel getContentPanel() {
         return contentPanel;
     }
     
+    private void loadMockConfigs() {
+        MockConfigService service = MockConfigService.getInstance(project);
+        MockConfig config = service.getConfig();
+        tableModel.setMockMethods(config.getMockMethods());
+        updateStats();
+    }
+    
+    private void filterTable() {
+        String text = searchField.getText().trim();
+        if (text.isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+        }
+        updateStats();
+    }
+    
+    private void toggleGlobalEnabled() {
+        globalEnabled = !globalEnabled;
+        globalToggleButton.setText(globalEnabled ? "Disable All" : "Enable All");
+        
+        MockConfigService service = MockConfigService.getInstance(project);
+        MockConfig config = service.getConfig();
+        
+        for (MockMethodConfig method : config.getMockMethods()) {
+            method.setEnabled(globalEnabled);
+        }
+        
+        service.saveConfig();
+        tableModel.fireTableDataChanged();
+        updateStats();
+    }
+    
+    private void clearAllWithConfirm() {
+        int result = Messages.showYesNoDialog(
+            project,
+            "Are you sure you want to clear all mock configurations?",
+            "Confirm Clear All",
+            Messages.getQuestionIcon()
+        );
+        
+        if (result == Messages.YES) {
+            clearResults();
+        }
+    }
+    
+    private void previousPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            updatePaginationControls();
+            tableModel.fireTableDataChanged();
+        }
+    }
+    
+    private void nextPage() {
+        int totalPages = getTotalPages();
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            updatePaginationControls();
+            tableModel.fireTableDataChanged();
+        }
+    }
+    
+    private int getTotalPages() {
+        int totalRows = tableModel.getRowCount();
+        return (totalRows + PAGE_SIZE - 1) / PAGE_SIZE;
+    }
+    
+    private void updatePaginationControls() {
+        int totalPages = getTotalPages();
+        pageLabel.setText("Page " + (currentPage + 1) + " of " + Math.max(1, totalPages));
+        prevButton.setEnabled(currentPage > 0);
+        nextButton.setEnabled(currentPage < totalPages - 1);
+    }
+    
+    private void updateStats() {
+        int total = tableModel.getRowCount();
+        int enabled = 0;
+        MockConfigService service = MockConfigService.getInstance(project);
+        MockConfig config = service.getConfig();
+        
+        for (MockMethodConfig method : config.getMockMethods()) {
+            if (method.isEnabled()) {
+                enabled++;
+            }
+        }
+        
+        statsLabel.setText("Mock Methods: " + total + " (Enabled: " + enabled + ")");
+    }
+    
     public void addMockMethod(String className, String methodName, String signature, String returnValue) {
         SwingUtilities.invokeLater(() -> {
             System.out.println("[ToolWindow] addMockMethod called: " + className + "." + methodName);
             
-            // 提取简短的类名
-            String shortClassName = className.substring(className.lastIndexOf('.') + 1);
+            MockMethodConfig methodConfig = new MockMethodConfig();
+            methodConfig.setClassName(className);
+            methodConfig.setMethodName(methodName);
+            methodConfig.setSignature(signature);
+            methodConfig.setReturnValue(returnValue);
+            methodConfig.setEnabled(true);
             
-            // 添加到表格
-            tableModel.addRow(new Object[]{
-                shortClassName,
-                methodName,
-                signature,
-                returnValue
-            });
+            MockConfigService service = MockConfigService.getInstance(project);
+            MockConfig config = service.getConfig();
+            config.addMockMethod(methodConfig);
+            service.saveConfig();
             
-            System.out.println("[ToolWindow] Row added to table. Row count: " + tableModel.getRowCount());
+            loadMockConfigs();
+            updatePaginationControls();
             
-            // 更新统计
-            statsLabel.setText("Mock Methods: " + tableModel.getRowCount());
-            
-            // 强制刷新表格
-            tableModel.fireTableDataChanged();
-            mockTable.repaint();
-            contentPanel.revalidate();
-            contentPanel.repaint();
+            System.out.println("[ToolWindow] Mock method added. Total count: " + tableModel.getRowCount());
         });
     }
     
@@ -101,15 +255,93 @@ public class MyRunnerToolWindowContent {
     }
     
     public void clearResults() {
-        tableModel.setRowCount(0);
-        statsLabel.setText("Mock Methods: 0");
+        MockConfigService service = MockConfigService.getInstance(project);
+        service.getConfig().clearAll();
+        service.saveConfig();
+        
+        loadMockConfigs();
+        updatePaginationControls();
+        updateStats();
     }
     
     public void refresh() {
-        tableModel.fireTableDataChanged();
+        loadMockConfigs();
+        updatePaginationControls();
+        updateStats();
     }
     
-    public static MyRunnerToolWindowContent getInstance(Project project) {
-        return project.getService(MyRunnerToolWindowContent.class);
+    public static MockRunnerToolWindowContent getInstance(Project project) {
+        return project.getService(MockRunnerToolWindowContent.class);
+    }
+    
+    // 自定义表格模型
+    private class MockTableModel extends AbstractTableModel {
+        private final String[] columnNames = {"Enabled", "Class", "Method", "Args", "Return Value"};
+        private List<MockMethodConfig> mockMethods = new ArrayList<>();
+        
+        public void setMockMethods(List<MockMethodConfig> methods) {
+            this.mockMethods = new ArrayList<>(methods);
+            fireTableDataChanged();
+        }
+        
+        @Override
+        public int getRowCount() {
+            return mockMethods.size();
+        }
+        
+        @Override
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+        
+        @Override
+        public String getColumnName(int column) {
+            return columnNames[column];
+        }
+        
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if (columnIndex == 0) {
+                return Boolean.class;
+            }
+            return String.class;
+        }
+        
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return columnIndex == 0; // 只有Enabled列可编辑
+        }
+        
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            if (rowIndex >= mockMethods.size()) {
+                return null;
+            }
+            
+            MockMethodConfig method = mockMethods.get(rowIndex);
+            switch (columnIndex) {
+                case 0: return method.isEnabled();
+                case 1: return method.getClassName().substring(method.getClassName().lastIndexOf('.') + 1);
+                case 2: return method.getMethodName();
+                case 3: return method.getSignature();
+                case 4: return method.getReturnValue();
+                default: return null;
+            }
+        }
+        
+        @Override
+        public void setValueAt(Object value, int rowIndex, int columnIndex) {
+            if (columnIndex == 0 && rowIndex < mockMethods.size()) {
+                MockMethodConfig method = mockMethods.get(rowIndex);
+                method.setEnabled((Boolean) value);
+                
+                // 保存到配置服务
+                MockConfigService service = MockConfigService.getInstance(project);
+                service.saveConfig();
+                
+                fireTableCellUpdated(rowIndex, columnIndex);
+                updateStats();
+            }
+        }
     }
 }
