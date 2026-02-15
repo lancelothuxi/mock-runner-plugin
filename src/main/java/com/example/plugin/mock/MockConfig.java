@@ -32,12 +32,55 @@ public class MockConfig implements Serializable {
 
     public void addMockMethod(MockMethodConfig methodConfig) {
         mockMethods.add(methodConfig);
+        
+        // 同时添加到 mockRules，供 Agent 使用
+        String returnType = inferReturnType(methodConfig.getReturnValue());
+        MockRule rule = new MockRule(methodConfig.getReturnValue(), returnType);
+        rule.setEnabled(methodConfig.isEnabled());
+        addMockRule(methodConfig.getClassName(), methodConfig.getMethodName(), rule);
+    }
+    
+    /**
+     * 从 mockMethods 重建 mockRules
+     * 用于从持久化状态加载后同步数据
+     */
+    public void rebuildMockRules() {
+        mockRules.clear();
+        for (MockMethodConfig methodConfig : mockMethods) {
+            String returnType = inferReturnType(methodConfig.getReturnValue());
+            MockRule rule = new MockRule(methodConfig.getReturnValue(), returnType);
+            rule.setEnabled(methodConfig.isEnabled());
+            addMockRule(methodConfig.getClassName(), methodConfig.getMethodName(), rule);
+        }
+    }
+    
+    private String inferReturnType(String returnValue) {
+        if (returnValue == null || returnValue.isEmpty()) {
+            return "java.lang.Object";
+        }
+        if (returnValue.equals("[]") || returnValue.startsWith("[")) {
+            return "java.util.List";
+        }
+        if (returnValue.equals("true") || returnValue.equals("false")) {
+            return "boolean";
+        }
+        try {
+            Integer.parseInt(returnValue);
+            return "int";
+        } catch (NumberFormatException e) {
+            // 不是整数
+        }
+        return "java.lang.String";
     }
 
     public void removeMockMethod(String className, String methodName) {
         mockMethods.removeIf(m ->
             m.getClassName().equals(className) && m.getMethodName().equals(methodName)
         );
+        
+        // 同时从 mockRules 中删除
+        String key = className + "." + methodName;
+        mockRules.remove(key);
     }
 
     public List<MockMethodConfig> getMockMethods() {

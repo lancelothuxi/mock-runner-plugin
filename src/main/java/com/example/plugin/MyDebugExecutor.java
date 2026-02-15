@@ -1,6 +1,7 @@
 package com.example.plugin;
 
 import com.intellij.execution.Executor;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.wm.ToolWindowId;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,12 +17,12 @@ public class MyDebugExecutor extends Executor {
     
     @Override
     public @NotNull Icon getToolWindowIcon() {
-        return MockRunnerIcons.MOCK_RUNNER;
+        return AllIcons.Actions.StartDebugger;
     }
     
     @Override
     public @NotNull Icon getIcon() {
-        return MockRunnerIcons.MOCK_RUNNER;
+        return AllIcons.Actions.StartDebugger;
     }
     
     @Override

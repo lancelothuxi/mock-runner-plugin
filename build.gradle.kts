@@ -71,6 +71,18 @@ tasks {
             into("${intellij.pluginName.get()}/lib")
         }
     }
+    
+    // 在 prepareSandbox 后自动更新 agent jar
+    named("prepareSandbox") {
+        doLast {
+            println("========================================")
+            println("正在用快速编译覆盖 agent jar...")
+            println("========================================")
+            exec {
+                commandLine("bash", "-c", "./ultra-fast-build.sh")
+            }
+        }
+    }
 }
 
 java {

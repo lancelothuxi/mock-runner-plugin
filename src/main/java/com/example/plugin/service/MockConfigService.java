@@ -3,18 +3,88 @@ package com.example.plugin.service;
 import com.example.plugin.mock.MockConfig;
 import com.example.plugin.mock.MockMethodConfig;
 import com.example.plugin.ui.MyRunnerToolWindowContent;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class MockConfigService {
+@State(
+    name = "MockConfigService",
+    storages = @Storage("mockRunnerConfig.xml")
+)
+public class MockConfigService implements PersistentStateComponent<MockConfigService.State> {
+    private static final Logger LOG = Logger.getInstance(MockConfigService.class);
     private final Project project;
-    private final MockConfig mockConfig;
+    private MockConfig mockConfig;
     
     public MockConfigService(Project project) {
         this.project = project;
         this.mockConfig = new MockConfig();
+    }
+    
+    // 持久化状态类
+    public static class State {
+        public String mockConfigJson;
+    }
+    
+    @Nullable
+    @Override
+    public State getState() {
+        State state = new State();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        state.mockConfigJson = gson.toJson(mockConfig);
+        LOG.info("Saving state: " + state.mockConfigJson);
+        return state;
+    }
+    
+    @Override
+    public void loadState(@NotNull State state) {
+        if (state.mockConfigJson != null && !state.mockConfigJson.isEmpty()) {
+            try {
+                Gson gson = new Gson();
+                mockConfig = gson.fromJson(state.mockConfigJson, MockConfig.class);
+                if (mockConfig == null) {
+                    mockConfig = new MockConfig();
+                }
+                LOG.info("Loaded state: " + state.mockConfigJson);
+                
+                // 重建 mockRules（从 mockMethods 同步）
+                mockConfig.rebuildMockRules();
+                
+                // 加载后更新 UI
+                updateToolWindowFromConfig();
+            } catch (Exception e) {
+                LOG.error("Failed to load state: " + e.getMessage(), e);
+                mockConfig = new MockConfig();
+            }
+        }
+    }
+    
+    private void updateToolWindowFromConfig() {
+        // 延迟更新 UI，确保 ToolWindow 已经初始化
+        com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater(() -> {
+            MyRunnerToolWindowContent toolWindow = project.getService(MyRunnerToolWindowContent.class);
+            if (toolWindow != null) {
+                toolWindow.clearResults();
+                for (MockMethodConfig method : mockConfig.getMockMethods()) {
+                    toolWindow.addMockMethod(
+                        method.getClassName(),
+                        method.getMethodName(),
+                        method.getSignature(),
+                        method.getReturnValue()
+                    );
+                }
+                LOG.info("Updated ToolWindow with " + mockConfig.getMockMethods().size() + " mock methods");
+            }
+        });
     }
     
     public void addMockMethod(String className, String methodName, String signature, String returnValue) {
@@ -26,7 +96,7 @@ public class MockConfigService {
         
         mockConfig.addMockMethod(methodConfig);
         
-        System.out.println("[MockConfigService] Added mock: " + className + "." + methodName);
+        LOG.info("Added mock: " + className + "." + methodName);
         
         // 确保 ToolWindow 可见
         com.intellij.openapi.wm.ToolWindowManager toolWindowManager = 
@@ -38,13 +108,13 @@ public class MockConfigService {
         
         // 更新 UI
         MyRunnerToolWindowContent toolWindowContent = project.getService(MyRunnerToolWindowContent.class);
-        System.out.println("[MockConfigService] ToolWindow instance: " + toolWindowContent);
+        LOG.info("ToolWindow instance: " + toolWindowContent);
         
         if (toolWindowContent != null) {
             toolWindowContent.addMockMethod(className, methodName, signature, returnValue);
-            System.out.println("[MockConfigService] Called addMockMethod on toolWindow");
+            LOG.info("Called addMockMethod on toolWindow");
         } else {
-            System.err.println("[MockConfigService] ToolWindow is null!");
+            LOG.error("ToolWindow is null!");
         }
         
         // 刷新编辑器，显示图标
@@ -85,16 +155,13 @@ public class MockConfigService {
         return mockConfig.getMockMethods();
     }
 
-
     public boolean isMocked(String className, String methodName) {
         return mockConfig.getMockMethods().stream()
             .anyMatch(m -> m.getClassName().equals(className) && m.getMethodName().equals(methodName));
     }
 
-
     private void refreshEditors() {
         // 刷新所有打开的编辑器，让 LineMarker 更新
         DaemonCodeAnalyzer.getInstance(project).restart();
     }
-
 }

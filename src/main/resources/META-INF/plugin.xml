@@ -12,14 +12,20 @@
     <depends>com.intellij.modules.java</depends>
     
     <extensions defaultExtensionNs="com.intellij">
-        <!-- 注册自定义程序运行器 -->
+        <!-- 注册自定义程序运行器 - Run 模式 -->
         <programRunner implementation="com.example.plugin.MyProgramRunner"/>
+        
+        <!-- 注册自定义程序运行器 - Debug 模式 -->
+        <programRunner implementation="com.example.plugin.MyDebugProgramRunner"/>
         
         <!-- 注册自定义执行器 - Run with Mock -->
         <executor implementation="com.example.plugin.MyCustomExecutor" order="last"/>
         
         <!-- 注册自定义执行器 - Debug with Mock -->
         <executor implementation="com.example.plugin.MyDebugExecutor" order="last"/>
+        
+        <!-- 注册 RunConfiguration 扩展 - 自动添加 Mock Agent -->
+        <runConfigurationExtension implementation="com.example.plugin.extension.MockRunConfigurationExtension"/>
         
         <!-- 注册 ToolWindow - 改为右侧边栏，使用自定义图标 -->
         <toolWindow id="My Runner" 

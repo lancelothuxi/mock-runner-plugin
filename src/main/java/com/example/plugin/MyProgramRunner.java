@@ -7,6 +7,8 @@ import com.example.plugin.ui.MyRunnerToolWindowContent;
 import com.google.gson.Gson;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
+import com.intellij.execution.application.ApplicationConfiguration;
+import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
@@ -15,6 +17,7 @@ import com.intellij.execution.runners.GenericProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.execution.ui.RunContentManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +30,7 @@ import java.util.Date;
 
 public class MyProgramRunner extends GenericProgramRunner {
     
+    private static final Logger LOG = Logger.getInstance(MyProgramRunner.class);
     private static final String RUNNER_ID = "MyCustomProgramRunner";
 
     @NotNull
@@ -37,9 +41,17 @@ public class MyProgramRunner extends GenericProgramRunner {
 
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        // 支持自定义的 Run 和 Debug Executor
-        return MyCustomExecutor.EXECUTOR_ID.equals(executorId) || 
-               MyDebugExecutor.EXECUTOR_ID.equals(executorId);
+        LOG.info("canRun called - executorId: " + executorId + 
+                 ", profile: " + profile.getClass().getName() + 
+                 ", MyCustomExecutor.EXECUTOR_ID: " + MyCustomExecutor.EXECUTOR_ID);
+        
+        boolean isMyExecutor = MyCustomExecutor.EXECUTOR_ID.equals(executorId);
+        boolean isAppConfig = profile instanceof ApplicationConfiguration;
+        
+        LOG.info("isMyExecutor: " + isMyExecutor + ", isAppConfig: " + isAppConfig);
+        
+        // 只支持自定义的 Run Executor，并且支持 Java Application 配置
+        return isMyExecutor && isAppConfig;
     }
 
     @Nullable
@@ -48,7 +60,7 @@ public class MyProgramRunner extends GenericProgramRunner {
                                              @NotNull ExecutionEnvironment environment) 
             throws ExecutionException {
         
-        System.out.println("Running with My Custom Runner!");
+        LOG.info("Running with My Custom Runner!");
         
         // 显示 ToolWindow
         ApplicationManager.getApplication().invokeLater(() -> {
@@ -69,10 +81,19 @@ public class MyProgramRunner extends GenericProgramRunner {
         
         // 保存 Mock 配置到临时文件
         File configFile = saveMockConfig(mockConfig);
+        LOG.info("Mock config saved to: " + configFile.getAbsolutePath());
         
-        // 添加 JavaAgent 参数
-        if (state instanceof JavaParameters) {
-            addAgentToJavaParameters((JavaParameters) state, configFile);
+        // 添加 JavaAgent 参数 - 通过修改 CommandLineState
+        if (state instanceof JavaCommandLineState) {
+            JavaCommandLineState javaState = (JavaCommandLineState) state;
+            try {
+                JavaParameters javaParameters = javaState.getJavaParameters();
+                addAgentToJavaParameters(javaParameters, configFile);
+            } catch (Exception e) {
+                LOG.error("Failed to add agent: " + e.getMessage(), e);
+            }
+        } else {
+            LOG.error("State is not JavaCommandLineState: " + state.getClass().getName());
         }
         
         // 记录到 ToolWindow
@@ -83,7 +104,7 @@ public class MyProgramRunner extends GenericProgramRunner {
             }
         });
         
-        // 执行程序并获取结果 - 直接调用 state.execute，不要调用 super.doExecute
+        // 执行程序并获取结果
         ExecutionResult executionResult = state.execute(environment.getExecutor(), this);
         if (executionResult == null) {
             return null;
@@ -110,7 +131,7 @@ public class MyProgramRunner extends GenericProgramRunner {
                 gson.toJson(mockConfig, writer);
             }
             
-            System.out.println("[MockRunner] Saved mock config to: " + configFile.getAbsolutePath());
+            LOG.info("Saved mock config to: " + configFile.getAbsolutePath());
             return configFile;
         } catch (Exception e) {
             throw new ExecutionException("Failed to save mock config", e);
@@ -124,32 +145,45 @@ public class MyProgramRunner extends GenericProgramRunner {
         if (agentJarPath != null) {
             String agentArg = "-javaagent:" + agentJarPath + "=" + configFile.getAbsolutePath();
             javaParameters.getVMParametersList().add(agentArg);
-            System.out.println("[MockRunner] Added agent: " + agentArg);
+            LOG.info("Added agent: " + agentArg);
         } else {
-            System.err.println("[MockRunner] Agent jar not found!");
+            LOG.error("Agent jar not found!");
         }
     }
     
     private String getAgentJarPath() {
         try {
-            // 从插件目录获取 agent jar
-            String pluginPath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-            File pluginDir = new File(pluginPath).getParentFile();
+            // 通过 PluginManager 获取插件路径
+            com.intellij.ide.plugins.IdeaPluginDescriptor plugin = 
+                com.intellij.ide.plugins.PluginManagerCore.getPlugin(
+                    com.intellij.openapi.extensions.PluginId.getId("com.example.myplugin"));
             
-            // 查找 agent jar
-            File[] agentJars = pluginDir.listFiles((dir, name) -> 
-                name.startsWith("mock-agent") && name.endsWith(".jar"));
-            
-            if (agentJars != null && agentJars.length > 0) {
-                String agentPath = agentJars[0].getAbsolutePath();
-                System.out.println("[MockRunner] Found agent jar: " + agentPath);
-                return agentPath;
+            if (plugin != null) {
+                java.nio.file.Path pluginPath = plugin.getPluginPath();
+                LOG.info("Plugin path: " + pluginPath);
+                
+                // 在插件的 lib 目录下查找 agent jar
+                java.nio.file.Path libPath = pluginPath.resolve("lib");
+                if (java.nio.file.Files.exists(libPath)) {
+                    try (java.util.stream.Stream<java.nio.file.Path> files = java.nio.file.Files.list(libPath)) {
+                        java.util.Optional<java.nio.file.Path> agentJar = files
+                            .filter(p -> p.getFileName().toString().startsWith("mock-agent") && 
+                                       p.getFileName().toString().endsWith(".jar"))
+                            .findFirst();
+                        
+                        if (agentJar.isPresent()) {
+                            String agentPath = agentJar.get().toAbsolutePath().toString();
+                            LOG.info("Found agent jar: " + agentPath);
+                            return agentPath;
+                        }
+                    }
+                }
             }
             
-            System.err.println("[MockRunner] Agent jar not found in: " + pluginDir.getAbsolutePath());
+            LOG.error("Agent jar not found in plugin directory");
             return null;
         } catch (Exception e) {
-            System.err.println("[MockRunner] Error finding agent jar: " + e.getMessage());
+            LOG.error("Error finding agent jar: " + e.getMessage(), e);
             return null;
         }
     }
