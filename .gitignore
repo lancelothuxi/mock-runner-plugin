@@ -72,10 +72,13 @@ $RECYCLE.BIN/
 
 # Logs
 *.log
+*.txt
 logs/
-runide.log
-runide2.log
+runide*.log
 gradle-build.log
+build-output.log
+r.log
+run.log
 
 # Temporary files
 *.tmp

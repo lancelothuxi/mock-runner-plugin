@@ -1,9 +1,0 @@
-=== 超快速构建（完全跳过 Gradle）===
-1. 编译 agent...
-2. 准备依赖...
-3. 打包 agent jar...
-
-✅ 完成！用时不到 3 秒
-   Agent jar: build/idea-sandbox/plugins/my-idea-plugin/lib/mock-agent-1.0.0-agent.jar
-
-现在在 IntelliJ 中重新运行你的应用！
