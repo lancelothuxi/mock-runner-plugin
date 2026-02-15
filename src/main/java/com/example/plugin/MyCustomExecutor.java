@@ -1,0 +1,63 @@
+package com.example.plugin;
+
+import com.intellij.execution.Executor;
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.util.text.TextWithMnemonic;
+import com.intellij.openapi.wm.ToolWindowId;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+
+public class MyCustomExecutor extends Executor {
+    public static final String EXECUTOR_ID = "MyCustomExecutor";
+    
+    @Override
+    public @NotNull String getToolWindowId() {
+        return ToolWindowId.RUN;
+    }
+    
+    @Override
+    public @NotNull Icon getToolWindowIcon() {
+        return AllIcons.Toolwindows.ToolWindowRun;
+    }
+    
+    @Override
+    public @NotNull Icon getIcon() {
+        return AllIcons.RunConfigurations.TestState.Run;
+    }
+    
+    @Override
+    public Icon getDisabledIcon() {
+        return null;
+    }
+    
+    @Override
+    public String getDescription() {
+        return "Run with My Custom Runner";
+    }
+    
+    @Override
+    public @NotNull String getActionName() {
+        return "MyCustomRun";
+    }
+    
+    @Override
+    public @NotNull String getId() {
+        return EXECUTOR_ID;
+    }
+    
+    @Override
+    public @NotNull String getStartActionText() {
+        return "Run with My Custom Runner";
+    }
+    
+    @Override
+    public String getContextActionId() {
+        return "RunClassMyCustom";
+    }
+    
+    @Override
+    public String getHelpId() {
+        return null;
+    }
+}

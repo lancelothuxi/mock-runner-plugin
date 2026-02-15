@@ -1,0 +1,17 @@
+<idea-plugin>
+  <version>1.0.0</version>
+  <idea-version since-build="223" until-build="233.*" />
+  <id>com.example.myplugin</id>
+  <name>My Custom Runner Plugin</name>
+  <vendor email="support@example.com" url="https://www.example.com">Example Company</vendor>
+  <description><![CDATA[A plugin that adds custom Run/Debug configurations similar to JProfiler.
+        Allows you to run or debug applications with custom settings.]]></description>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.java</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- 注册自定义程序运行器 -->
+    <programRunner implementation="com.example.plugin.MyProgramRunner" />
+    <!-- 注册自定义执行器 - 这会在运行按钮下拉菜单中显示 -->
+    <executor implementation="com.example.plugin.MyCustomExecutor" order="last" />
+  </extensions>
+</idea-plugin>

@@ -1,13 +1,24 @@
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.16.1"
+    id("org.jetbrains.intellij") version "1.17.4"
 }
 
 group = "com.example"
 version = "1.0.0"
 
 repositories {
+    maven { url = uri("https://maven.aliyun.com/repository/public") }
+    maven { url = uri("https://maven.aliyun.com/repository/central") }
+    maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+    maven { url = uri("https://maven.aliyun.com/repository/google") }
+    maven { url = uri("https://cache-redirector.jetbrains.com/intellij-dependencies") }
     mavenCentral()
+}
+
+dependencies {
+    implementation("net.bytebuddy:byte-buddy:1.14.9")
+    implementation("net.bytebuddy:byte-buddy-agent:1.14.9")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 intellij {
@@ -29,9 +40,40 @@ tasks {
     withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
+    
+    // 创建 Agent JAR 任务
+    val agentJar by registering(Jar::class) {
+        archiveBaseName.set("mock-agent")
+        archiveClassifier.set("agent")
+        
+        from(sourceSets.main.get().output)
+        
+        // 包含依赖
+        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+        
+        manifest {
+            attributes(
+                "Premain-Class" to "com.example.plugin.agent.MockAgent",
+                "Can-Redefine-Classes" to "true",
+                "Can-Retransform-Classes" to "true"
+            )
+        }
+        
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    
+    // 确保在构建插件前先构建 agent jar
+    prepareSandbox {
+        dependsOn(agentJar)
+        
+        // 将 agent jar 复制到插件目录
+        from(agentJar) {
+            into("${intellij.pluginName.get()}/lib")
+        }
+    }
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }

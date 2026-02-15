@@ -1,0 +1,31 @@
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://cache-redirector.jetbrains.com/intellij-dependencies' }
+        all { ArtifactRepository repo ->
+            if (repo instanceof MavenArtifactRepository) {
+                def url = repo.url.toString()
+                if (url.startsWith('https://repo1.maven.org/maven2') || url.startsWith('https://jcenter.bintray.com/')) {
+                    project.logger.lifecycle "Repository ${repo.url} replaced by https://maven.aliyun.com/repository/central."
+                    remove repo
+                }
+                if (url.startsWith('https://plugins.gradle.org/m2')) {
+                    project.logger.lifecycle "Repository ${repo.url} replaced by https://maven.aliyun.com/repository/gradle-plugin."
+                    remove repo
+                }
+            }
+        }
+        mavenCentral()
+    }
+    
+    buildscript {
+        repositories {
+            maven { url 'https://maven.aliyun.com/repository/public' }
+            maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+            maven { url 'https://cache-redirector.jetbrains.com/intellij-dependencies' }
+        }
+    }
+}

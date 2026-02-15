@@ -1,15 +1,24 @@
 package com.example.plugin;
 
+import com.example.plugin.mock.MockConfig;
+import com.example.plugin.ui.MockConfigDialog;
+import com.google.gson.Gson;
 import com.intellij.execution.ExecutionException;
+import com.intellij.execution.ExecutionResult;
+import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.executors.DefaultDebugExecutor;
-import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.GenericProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.execution.ui.RunContentManager;
+import com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Paths;
 
 public class MyProgramRunner extends GenericProgramRunner {
     
@@ -23,10 +32,8 @@ public class MyProgramRunner extends GenericProgramRunner {
 
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        // 支持 Run 和 Debug
-        return (DefaultRunExecutor.EXECUTOR_ID.equals(executorId) || 
-                DefaultDebugExecutor.EXECUTOR_ID.equals(executorId)) 
-                && profile instanceof MyRunConfiguration;
+        // 只支持我们自定义的 Executor
+        return MyCustomExecutor.EXECUTOR_ID.equals(executorId);
     }
 
     @Nullable
@@ -35,10 +42,98 @@ public class MyProgramRunner extends GenericProgramRunner {
                                              @NotNull ExecutionEnvironment environment) 
             throws ExecutionException {
         
-        // 在这里可以添加自定义的启动逻辑
         System.out.println("Running with My Custom Runner!");
         
-        // 调用默认的执行逻辑
-        return super.doExecute(state, environment);
+        // 显示 Mock 配置对话框
+        MockConfig mockConfig = new MockConfig();
+        
+        ApplicationManager.getApplication().invokeAndWait(() -> {
+            MockConfigDialog dialog = new MockConfigDialog(environment.getProject(), mockConfig);
+            dialog.show();
+        });
+        
+        // 保存 Mock 配置到临时文件
+        File configFile = saveMockConfig(mockConfig);
+        
+        // 添加 JavaAgent 参数
+        if (state instanceof JavaParameters) {
+            addAgentToJavaParameters((JavaParameters) state, configFile);
+        }
+        
+        // 执行程序并获取结果
+        ExecutionResult executionResult = state.execute(environment.getExecutor(), this);
+        if (executionResult == null) {
+            return null;
+        }
+        
+        // 创建运行内容描述符
+        RunContentDescriptor descriptor = new RunContentDescriptor(
+            executionResult.getExecutionConsole(),
+            executionResult.getProcessHandler(),
+            executionResult.getExecutionConsole().getComponent(),
+            environment.getRunProfile().getName() + " (Mock)"
+        );
+        
+        // 显示运行内容
+        RunContentManager.getInstance(environment.getProject())
+                .showRunContent(environment.getExecutor(), descriptor);
+        
+        return descriptor;
+    }
+    
+    private File saveMockConfig(MockConfig mockConfig) throws ExecutionException {
+        try {
+            File tempDir = new File(System.getProperty("java.io.tmpdir"), "mock-runner");
+            tempDir.mkdirs();
+            
+            File configFile = new File(tempDir, "mock-config.json");
+            
+            Gson gson = new Gson();
+            try (FileWriter writer = new FileWriter(configFile)) {
+                gson.toJson(mockConfig, writer);
+            }
+            
+            System.out.println("[MockRunner] Saved mock config to: " + configFile.getAbsolutePath());
+            return configFile;
+        } catch (Exception e) {
+            throw new ExecutionException("Failed to save mock config", e);
+        }
+    }
+    
+    private void addAgentToJavaParameters(JavaParameters javaParameters, File configFile) {
+        // 获取 agent jar 路径（需要构建 agent jar）
+        String agentJarPath = getAgentJarPath();
+        
+        if (agentJarPath != null) {
+            String agentArg = "-javaagent:" + agentJarPath + "=" + configFile.getAbsolutePath();
+            javaParameters.getVMParametersList().add(agentArg);
+            System.out.println("[MockRunner] Added agent: " + agentArg);
+        } else {
+            System.err.println("[MockRunner] Agent jar not found!");
+        }
+    }
+    
+    private String getAgentJarPath() {
+        try {
+            // 从插件目录获取 agent jar
+            String pluginPath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+            File pluginDir = new File(pluginPath).getParentFile();
+            
+            // 查找 agent jar
+            File[] agentJars = pluginDir.listFiles((dir, name) -> 
+                name.startsWith("mock-agent") && name.endsWith(".jar"));
+            
+            if (agentJars != null && agentJars.length > 0) {
+                String agentPath = agentJars[0].getAbsolutePath();
+                System.out.println("[MockRunner] Found agent jar: " + agentPath);
+                return agentPath;
+            }
+            
+            System.err.println("[MockRunner] Agent jar not found in: " + pluginDir.getAbsolutePath());
+            return null;
+        } catch (Exception e) {
+            System.err.println("[MockRunner] Error finding agent jar: " + e.getMessage());
+            return null;
+        }
     }
 }
