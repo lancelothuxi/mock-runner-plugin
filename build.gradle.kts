@@ -79,7 +79,7 @@ tasks {
             println("正在用快速编译覆盖 agent jar...")
             println("========================================")
             exec {
-                commandLine("bash", "-c", "./ultra-fast-build.sh")
+                commandLine("bash", "-c", "./scripts/ultra-fast-build.sh")
             }
         }
     }
