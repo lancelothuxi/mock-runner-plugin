@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class MyConfigurationType implements ConfigurationType {
+public class MockRunnerConfigurationType implements ConfigurationType {
     
     @NotNull
     @Override

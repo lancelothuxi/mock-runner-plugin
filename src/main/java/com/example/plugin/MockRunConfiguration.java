@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class MyRunConfiguration extends RunConfigurationBase<RunProfileState> {
+public class MockRunConfiguration extends RunConfigurationBase<RunProfileState> {
     
     private String myCustomParameter = "";
 
