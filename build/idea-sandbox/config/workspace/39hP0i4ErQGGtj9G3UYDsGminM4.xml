@@ -18,20 +18,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/student/StudentManagementApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+            <state relative-caret-position="528">
+              <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/student/StudentService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="63" column="33" selection-start-line="63" selection-start-column="25" selection-end-line="63" selection-end-column="35" />
+            <state relative-caret-position="8">
+              <caret line="56" column="25" selection-start-line="56" selection-start-column="25" selection-end-line="56" selection-end-column="25" />
               <folding>
                 <element signature="e#1569#1570#0" expanded="true" />
                 <element signature="e#1626#1627#0" expanded="true" />
@@ -45,10 +45,10 @@
   </component>
   <component name="FileTypeUsageLocalSummary">
     <fileType name="JAVA">
-      <summary usageCount="6" lastUsed="1771146789623" />
+      <summary usageCount="8" lastUsed="1771146988260" />
     </fileType>
     <fileType name="Markdown">
-      <summary usageCount="3" lastUsed="1771146789459" />
+      <summary usageCount="4" lastUsed="1771146988088" />
     </fileType>
   </component>
   <component name="IgnoredFileRootStore">
@@ -60,10 +60,10 @@
   </component>
   <component name="LanguageUsageStatistics">
     <language id="JAVA">
-      <summary usageCount="6" lastUsage="1771146789623" />
+      <summary usageCount="8" lastUsage="1771146988260" />
     </language>
     <language id="Markdown">
-      <summary usageCount="3" lastUsage="1771146789461" />
+      <summary usageCount="4" lastUsage="1771146988089" />
     </language>
   </component>
   <component name="MavenProjectNavigator">
@@ -116,6 +116,11 @@
       <pane id="Scope" />
     </panes>
   </component>
+  <component name="RunConfigurationStartHistory">
+    <history>
+      <element setting="Application.StudentManagementApp" executorId="MyCustomExecutor" />
+    </history>
+  </component>
   <component name="ToolWindowManager">
     <layout>
       <window_info id="Bookmarks" order="0" side_tool="true" />
@@ -124,8 +129,8 @@
       <window_info id="Structure" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" show_stripe_button="false" weight="0.3302616" />
+      <window_info anchor="bottom" id="Debug" order="3" show_stripe_button="false" weight="0.39982164" />
       <window_info anchor="bottom" id="TODO" order="4" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Problems View" order="6" />
@@ -134,14 +139,50 @@
       <window_info anchor="bottom" id="Build" order="9" />
       <window_info anchor="bottom" id="Dependencies" order="10" />
       <window_info anchor="right" id="Maven" order="0" />
-      <window_info active="true" anchor="right" id="My Runner" order="1" visible="true" weight="0.18177083" />
+      <window_info active="true" anchor="right" id="My Runner" order="1" visible="true" weight="0.39253473" />
       <window_info anchor="right" id="Notifications" order="2" weight="0.25017363" />
     </layout>
     <recentWindows>
-      <value>My Runner</value>
+      <value>Run</value>
       <value>Project</value>
+      <value>My Runner</value>
+      <value>Debug</value>
       <value>Notifications</value>
     </recentWindows>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="2832" height="644" key="GridCell.Tab.0.bottom" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.0.bottom/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
+    <state width="2832" height="644" key="GridCell.Tab.0.center" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.0.center/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
+    <state width="2832" height="644" key="GridCell.Tab.0.left" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.0.left/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
+    <state width="2832" height="644" key="GridCell.Tab.0.right" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.0.right/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
+    <state width="2832" height="644" key="GridCell.Tab.1.bottom" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.1.bottom/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
+    <state width="2832" height="644" key="GridCell.Tab.1.center" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.1.center/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
+    <state width="2832" height="644" key="GridCell.Tab.1.left" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.1.left/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
+    <state width="2832" height="644" key="GridCell.Tab.1.right" timestamp="1771149164494">
+      <screen x="0" y="0" width="2880" height="1756" />
+    </state>
+    <state width="2832" height="644" key="GridCell.Tab.1.right/0.0.2880.1756@0.0.2880.1756" timestamp="1771149164494" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/README.md">
@@ -152,22 +193,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/student/StudentManagementApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/student/StudentService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="63" column="33" selection-start-line="63" selection-start-column="25" selection-end-line="63" selection-end-column="35" />
+        <state relative-caret-position="8">
+          <caret line="56" column="25" selection-start-line="56" selection-start-column="25" selection-end-line="56" selection-end-column="25" />
           <folding>
             <element signature="e#1569#1570#0" expanded="true" />
             <element signature="e#1626#1627#0" expanded="true" />
             <element signature="e#1664#1694#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/student/StudentManagementApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
         </state>
       </provider>
     </entry>

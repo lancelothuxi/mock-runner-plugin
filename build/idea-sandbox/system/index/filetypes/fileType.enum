@@ -1,12 +1,7 @@
-XHTML
 XML
-JAVA
-GitIgnore file
 DTD
-CLASS
-Markdown
-Shell Script
 RNG Compact
+XHTML
 CSS
 textmate
 PATCH
@@ -14,10 +9,15 @@ PLAIN_TEXT
 JSON
 Kotlin
 script-definition-marker
+Shrinker Config File
+JAVA
+GitIgnore file
+Markdown
+Shell Script
 UNKNOWN
+CLASS
 Properties
 SPI
 Image
 JavaScript
 SVG
-Shrinker Config File

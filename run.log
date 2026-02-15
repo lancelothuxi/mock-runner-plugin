@@ -23,3 +23,77 @@ JCEF(16:27:991): initialized stderr logger, severity=LOGSEVERITY_DISABLE
 [MockConfigService] Called addMockMethod on toolWindow
 [ToolWindow] addMockMethod called: com.student.StudentService.findByName
 [ToolWindow] Row added to table. Row count: 1
+2026-02-15 17:20:21,423 [ 236323]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2026-02-15 17:20:21,475 [ 236375]   WARN - #c.i.d.i.RemoteConnectionBuilder - Capture agent is not supported for JRE null
+2026-02-15 17:43:17,485 [1612385]   WARN - #c.i.o.a.i.ActionUpdater - 12892 ms to grab EDT for RestoreViewAction#update@RunnerLayoutButtonToolbar (com.intellij.execution.ui.layout.actions.RestoreViewAction)
+2026-02-15 17:43:17,492 [1612392]   WARN - #c.i.o.a.i.ActionUpdater - 12892 ms total to grab EDT 6 times to expand DefaultActionGroup@RunnerLayoutButtonToolbar (com.intellij.openapi.actionSystem.DefaultActionGroup). Use `ActionUpdateThread.BGT`.
+2026-02-15 17:43:17,813 [1612713] SEVERE - #c.i.u.c.SchedulingWrapper - java.rmi.ConnectException: Connection refused to host: 127.0.0.1; nested exception is: 
+	java.net.ConnectException: 连接被拒绝
+java.lang.RuntimeException: java.rmi.ConnectException: Connection refused to host: 127.0.0.1; nested exception is: 
+	java.net.ConnectException: 连接被拒绝
+	at org.jetbrains.idea.maven.server.MavenServerConnectorImpl.lambda$startPullingLogger$1(MavenServerConnectorImpl.java:289)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+	at com.intellij.util.concurrency.SchedulingWrapper$MyScheduledFutureTask.run(SchedulingWrapper.java:275)
+	at com.intellij.util.concurrency.BoundedTaskExecutor.doRun(BoundedTaskExecutor.java:243)
+	at com.intellij.util.concurrency.BoundedTaskExecutor.access$200(BoundedTaskExecutor.java:29)
+	at com.intellij.util.concurrency.BoundedTaskExecutor$1.executeFirstTaskAndHelpQueue(BoundedTaskExecutor.java:216)
+	at com.intellij.util.ConcurrencyUtil.runUnderThreadName(ConcurrencyUtil.java:212)
+	at com.intellij.util.concurrency.BoundedTaskExecutor$1.run(BoundedTaskExecutor.java:205)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:702)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:699)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:699)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.rmi.ConnectException: Connection refused to host: 127.0.0.1; nested exception is: 
+	java.net.ConnectException: 连接被拒绝
+	at java.rmi/sun.rmi.transport.tcp.TCPEndpoint.newSocket(TCPEndpoint.java:626)
+	at java.rmi/sun.rmi.transport.tcp.TCPChannel.createConnection(TCPChannel.java:217)
+	at java.rmi/sun.rmi.transport.tcp.TCPChannel.newConnection(TCPChannel.java:204)
+	at java.rmi/sun.rmi.server.UnicastRef.invoke(UnicastRef.java:133)
+	at java.rmi/java.rmi.server.RemoteObjectInvocationHandler.invokeRemoteMethod(RemoteObjectInvocationHandler.java:215)
+	at java.rmi/java.rmi.server.RemoteObjectInvocationHandler.invoke(RemoteObjectInvocationHandler.java:160)
+	at jdk.proxy5/jdk.proxy5.$Proxy145.pull(Unknown Source)
+	at jdk.internal.reflect.GeneratedMethodAccessor316.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.intellij.execution.rmi.RemoteUtil.invokeRemote(RemoteUtil.java:150)
+	at com.intellij.execution.rmi.RemoteUtil.access$400(RemoteUtil.java:21)
+	at com.intellij.execution.rmi.RemoteUtil$1.lambda$invoke$0(RemoteUtil.java:134)
+	at com.intellij.openapi.util.ClassLoaderUtil.computeWithClassLoader(ClassLoaderUtil.java:31)
+	at com.intellij.execution.rmi.RemoteUtil.executeWithClassLoader(RemoteUtil.java:202)
+	at com.intellij.execution.rmi.RemoteUtil$1.invoke(RemoteUtil.java:134)
+	at jdk.proxy7/jdk.proxy7.$Proxy146.pull(Unknown Source)
+	at org.jetbrains.idea.maven.server.MavenServerConnectorImpl.lambda$startPullingLogger$1(MavenServerConnectorImpl.java:273)
+	... 15 more
+Caused by: java.net.ConnectException: 连接被拒绝
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:579)
+	at java.base/sun.nio.ch.Net.connect(Net.java:568)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:588)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:633)
+	at java.base/java.net.Socket.connect(Socket.java:583)
+	at java.base/java.net.Socket.<init>(Socket.java:507)
+	at java.base/java.net.Socket.<init>(Socket.java:287)
+	at com.intellij.execution.rmi.RemoteServer$1.createSocket(RemoteServer.java:150)
+	at java.rmi/sun.rmi.transport.tcp.TCPEndpoint.newSocket(TCPEndpoint.java:620)
+	... 32 more
+2026-02-15 17:43:17,816 [1612716] SEVERE - #c.i.u.c.SchedulingWrapper - IntelliJ IDEA 2022.3  Build #IC-223.7571.182
+2026-02-15 17:43:17,816 [1612716] SEVERE - #c.i.u.c.SchedulingWrapper - JDK: 17.0.5; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2026-02-15 17:43:17,817 [1612717] SEVERE - #c.i.u.c.SchedulingWrapper - OS: Linux
+[MockConfigService] Added mock: com.student.StudentService.getAllStudents
+[MockConfigService] ToolWindow instance: com.example.plugin.ui.MyRunnerToolWindowContent@7c91ad71
+[MockConfigService] Called addMockMethod on toolWindow
+[ToolWindow] addMockMethod called: com.student.StudentService.getAllStudents
+[ToolWindow] Row added to table. Row count: 2
+2026-02-15 17:44:35,676 [1690576]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+Running with My Custom Runner!
+[MockRunner] Saved mock config to: /tmp/mock-runner/mock-config.json
+
+> Task :classpathIndexCleanup
+
+BUILD SUCCESSFUL in 36m 27s
+11 actionable tasks: 8 executed, 3 up-to-date

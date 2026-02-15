@@ -1,5 +1,6 @@
 package com.example.plugin.marker;
 
+import com.example.plugin.MockRunnerIcons;
 import com.example.plugin.service.MockConfigService;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
@@ -48,7 +49,7 @@ public class MockedMethodLineMarkerProvider implements LineMarkerProvider {
             return new LineMarkerInfo<>(
                 element,
                 element.getTextRange(),
-                AllIcons.Debugger.Db_muted_breakpoint,  // 使用一个合适的图标
+                MockRunnerIcons.MOCK_RUNNER,  // 使用自定义 Mock 图标
                 psiElement -> "This method is mocked",
                 null,
                 GutterIconRenderer.Alignment.LEFT,

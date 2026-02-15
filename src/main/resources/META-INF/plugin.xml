@@ -15,14 +15,17 @@
         <!-- 注册自定义程序运行器 -->
         <programRunner implementation="com.example.plugin.MyProgramRunner"/>
         
-        <!-- 注册自定义执行器 - 这会在运行按钮下拉菜单中显示 -->
+        <!-- 注册自定义执行器 - Run with Mock -->
         <executor implementation="com.example.plugin.MyCustomExecutor" order="last"/>
         
-        <!-- 注册 ToolWindow - 改为右侧边栏 -->
+        <!-- 注册自定义执行器 - Debug with Mock -->
+        <executor implementation="com.example.plugin.MyDebugExecutor" order="last"/>
+        
+        <!-- 注册 ToolWindow - 改为右侧边栏，使用自定义图标 -->
         <toolWindow id="My Runner" 
                     anchor="right" 
                     factoryClass="com.example.plugin.ui.MyRunnerToolWindowFactory"
-                    icon="AllIcons.Toolwindows.ToolWindowRun"/>
+                    icon="/icons/mockRunner.svg"/>
         
         <!-- 注册 Service -->
         <projectService serviceImplementation="com.example.plugin.ui.MyRunnerToolWindowContent"/>

@@ -37,8 +37,9 @@ public class MyProgramRunner extends GenericProgramRunner {
 
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        // 只支持我们自定义的 Executor
-        return MyCustomExecutor.EXECUTOR_ID.equals(executorId);
+        // 支持自定义的 Run 和 Debug Executor
+        return MyCustomExecutor.EXECUTOR_ID.equals(executorId) || 
+               MyDebugExecutor.EXECUTOR_ID.equals(executorId);
     }
 
     @Nullable
@@ -82,25 +83,19 @@ public class MyProgramRunner extends GenericProgramRunner {
             }
         });
         
-        // 执行程序并获取结果
+        // 执行程序并获取结果 - 直接调用 state.execute，不要调用 super.doExecute
         ExecutionResult executionResult = state.execute(environment.getExecutor(), this);
         if (executionResult == null) {
             return null;
         }
         
-        // 创建运行内容描述符
-        RunContentDescriptor descriptor = new RunContentDescriptor(
+        // 创建并返回运行内容描述符
+        return new RunContentDescriptor(
             executionResult.getExecutionConsole(),
             executionResult.getProcessHandler(),
             executionResult.getExecutionConsole().getComponent(),
             environment.getRunProfile().getName() + " (Mock)"
         );
-        
-        // 显示运行内容
-        RunContentManager.getInstance(environment.getProject())
-                .showRunContent(environment.getExecutor(), descriptor);
-        
-        return descriptor;
     }
     
     private File saveMockConfig(MockConfig mockConfig) throws ExecutionException {

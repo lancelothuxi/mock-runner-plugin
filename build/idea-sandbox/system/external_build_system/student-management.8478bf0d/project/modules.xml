@@ -1,7 +1,7 @@
 <project>
   <component name="ExternalProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/student-management.iml" filepath="$PROJECT_DIR$/.idea/student-management.iml" />
+      <module fileurl="file://$PROJECT_DIR$/student-management.iml" filepath="$PROJECT_DIR$/student-management.iml" />
     </modules>
   </component>
 </project>

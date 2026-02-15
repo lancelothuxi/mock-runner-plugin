@@ -18,12 +18,12 @@ public class MyCustomExecutor extends Executor {
     
     @Override
     public @NotNull Icon getToolWindowIcon() {
-        return AllIcons.Toolwindows.ToolWindowRun;
+        return MockRunnerIcons.MOCK_RUNNER;
     }
     
     @Override
     public @NotNull Icon getIcon() {
-        return AllIcons.RunConfigurations.TestState.Run;
+        return MockRunnerIcons.MOCK_RUNNER;
     }
     
     @Override

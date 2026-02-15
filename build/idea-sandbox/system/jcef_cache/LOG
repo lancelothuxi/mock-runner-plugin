@@ -1,3 +1,2 @@
-2026/02/15-17:16:27.991 49d87 Reusing MANIFEST /home/lancelot/untitled/build/idea-sandbox/system/jcef_cache/MANIFEST-000001
-2026/02/15-17:16:27.992 49d87 Recovering log #3
-2026/02/15-17:16:27.992 49d87 Reusing old log /home/lancelot/untitled/build/idea-sandbox/system/jcef_cache/000003.log 
+2026/02/15-17:55:42.591 4d020 Creating DB /home/lancelot/untitled/build/idea-sandbox/system/jcef_cache since it was missing.
+2026/02/15-17:55:42.592 4d020 Reusing MANIFEST /home/lancelot/untitled/build/idea-sandbox/system/jcef_cache/MANIFEST-000001
