@@ -1,0 +1,405 @@
+> Task :initializeIntelliJPlugin SKIPPED
+> Task :patchPluginXml UP-TO-DATE
+> Task :verifyPluginConfiguration
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :instrumentCode UP-TO-DATE
+> Task :agentJar UP-TO-DATE
+> Task :instrumentedJar UP-TO-DATE
+> Task :jar UP-TO-DATE
+> Task :prepareSandbox UP-TO-DATE
+
+> Task :runIde
+CompileCommand: exclude com/intellij/openapi/vfs/impl/FilePartNodeRoot.trieDescend bool exclude = true
+2026-02-15 16:32:12,947 [  36035]   WARN - #c.i.e.RunManager - Must be not called before project components initialized
+Info  | RdCoroutineScope          | 25:DefaultDispatcher-worker-13 @coroutine#438 | RdCoroutineHost overridden 
+2026-02-15 16:32:13,184 [  36272]   WARN - #o.j.i.maven - Using extension org.jetbrains.idea.maven.maven3.Maven3Support@4e9a6d3f to start MavenServer
+2026-02-15 16:32:14,521 [  37609]   WARN - #o.j.i.m.u.MavenMergingUpdateQueue - Invalid suspend counter state
+java.lang.Exception
+	at org.jetbrains.idea.maven.utils.MavenMergingUpdateQueue.resume(MavenMergingUpdateQueue.java:137)
+	at org.jetbrains.idea.maven.utils.MavenMergingUpdateQueue$4.beforeModalityStateChanged(MavenMergingUpdateQueue.java:111)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.intellij.util.EventDispatcher.dispatchVoidMethod(EventDispatcher.java:120)
+	at com.intellij.util.EventDispatcher.lambda$createMulticaster$1(EventDispatcher.java:85)
+	at jdk.proxy2/jdk.proxy2.$Proxy68.beforeModalityStateChanged(Unknown Source)
+	at com.intellij.openapi.application.impl.LaterInvocator.leaveModal(LaterInvocator.java:236)
+	at com.intellij.openapi.progress.impl.PlatformTaskSupport$runBlockingModalInternal$1$1.invokeSuspend(PlatformTaskSupport.kt:97)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:284)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:38)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at com.intellij.openapi.progress.impl.PlatformTaskSupport.runBlockingModalInternal(PlatformTaskSupport.kt:76)
+	at com.intellij.openapi.progress.TasksKt.runBlockingModal(tasks.kt:155)
+	at com.intellij.ide.impl.ProjectUtilKt.runBlockingUnderModalProgress(ProjectUtil.kt:722)
+	at com.intellij.ide.impl.ProjectUtilKt.runBlockingUnderModalProgress$default(ProjectUtil.kt:719)
+	at com.intellij.ide.actions.OpenFileAction.actionPerformed$lambda-0(OpenFileAction.kt:80)
+	at com.intellij.openapi.fileChooser.ex.FileChooserDialogImpl.choose(FileChooserDialogImpl.java:137)
+	at com.intellij.openapi.fileChooser.FileChooser.chooseFiles(FileChooser.java:102)
+	at com.intellij.openapi.fileChooser.FileChooser.chooseFiles(FileChooser.java:80)
+	at com.intellij.ide.actions.OpenFileAction.actionPerformed(OpenFileAction.kt:72)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.doPerformActionOrShowPopup(ActionUtil.java:323)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.lambda$performActionDumbAwareWithCallbacks$4(ActionUtil.java:302)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.performDumbAwareWithCallbacks(ActionUtil.java:346)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.performActionDumbAwareWithCallbacks(ActionUtil.java:302)
+	at com.intellij.openapi.wm.impl.welcomeScreen.WelcomeScreenActionsUtil.performAnActionForComponent(WelcomeScreenActionsUtil.java:101)
+	at com.intellij.openapi.wm.impl.welcomeScreen.WelcomeScreenActionsUtil$LargeIconWithTextWrapper.lambda$new$0(WelcomeScreenActionsUtil.java:130)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2313)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:297)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6648)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3392)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6413)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5022)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4854)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2802)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4854)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:781)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:730)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:724)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:97)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:754)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:752)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:751)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.java:909)
+	at com.intellij.ide.IdeEventQueue.dispatchMouseEvent(IdeEventQueue.java:831)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:753)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$5(IdeEventQueue.java:437)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:774)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$6(IdeEventQueue.java:436)
+	at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:113)
+	at com.intellij.ide.IdeEventQueue.performActivity(IdeEventQueue.java:615)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$7(IdeEventQueue.java:434)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:813)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:480)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:117)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:105)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:92)
+JCEF(32:15:367): initialized stderr logger, severity=LOGSEVERITY_DISABLE
+2026-02-15 16:32:15,980 [  39068]   WARN - #c.i.o.a.i.ActionUpdater - 340 ms to grab EDT for BackAction#update@MainToolbar (com.intellij.ide.actions.BackAction)
+2026-02-15 16:32:20,103 [  43191]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-jar-plugin::3.3.0, was also in node: null
+2026-02-15 16:32:20,327 [  43415]   WARN - #c.i.d.MemorySizeConfigurator - The IDE is not configured for using custom VM options (jb.vmOptionsFile=null)
+java.io.IOException: The IDE is not configured for using custom VM options (jb.vmOptionsFile=null)
+	at com.intellij.diagnostic.VMOptions.setOptions(VMOptions.java:203)
+	at com.intellij.diagnostic.VMOptions.setOption(VMOptions.java:194)
+	at com.intellij.diagnostic.VMOptions.setOption(VMOptions.java:176)
+	at com.intellij.diagnostic.MemorySizeConfigurator.execute(MemorySizeConfigurator.kt:48)
+	at com.intellij.ide.startup.impl.StartupManagerImpl$runBackgroundPostStartupActivities$1.invokeSuspend(StartupManagerImpl.kt:435)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:570)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:750)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:677)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:664)
+2026-02-15 16:32:27,627 [  50715]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.shared:file-management::3.1.0, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.slf4j:slf4j-api::1.7.36, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-io:commons-io::2.11.0, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-archiver::3.6.0, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-io::3.4.0, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading javax.inject:javax.inject::1, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-archiver::4.4.0, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.commons:commons-compress::1.21, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.iq80.snappy:snappy::0.4, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.tukaani:xz::1.9, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-interpolation::1.26, was also in node: null
+2026-02-15 16:32:27,628 [  50716]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::3.4.2, was also in node: null
+2026-02-15 16:32:33,640 [  56728]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.mojo:exec-maven-plugin::3.1.0, was also in node: null
+2026-02-15 16:32:35,776 [  58864]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-component-annotations::2.1.1, was also in node: null
+2026-02-15 16:32:35,777 [  58865]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.commons:commons-exec::1.3, was also in node: null
+2026-02-15 16:32:37,149 [  60237]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-compiler-plugin::3.11.0, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.shared:maven-shared-utils::3.3.4, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-io:commons-io::2.6, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.shared:maven-shared-incremental::1.1, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-component-annotations::1.5.5, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-java::1.1.2, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.ow2.asm:asm::9.4, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading com.thoughtworks.qdox:qdox::2.0.3, was also in node: null
+2026-02-15 16:32:44,672 [  67760]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-compiler-api::2.13.0, was also in node: null
+2026-02-15 16:32:44,673 [  67761]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::3.5.0, was also in node: null
+2026-02-15 16:32:44,673 [  67761]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-compiler-manager::2.13.0, was also in node: null
+2026-02-15 16:32:44,673 [  67761]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-compiler-javac::2.13.0, was also in node: null
+2026-02-15 16:32:46,678 [  69766]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-clean-plugin::2.5, was also in node: null
+2026-02-15 16:32:48,686 [  71774]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-api::2.0.6, was also in node: null
+2026-02-15 16:32:48,687 [  71775]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::3.0, was also in node: null
+2026-02-15 16:32:50,193 [  73281]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-resources-plugin::2.6, was also in node: null
+2026-02-15 16:33:02,730 [  85818]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-project::2.0.6, was also in node: null
+2026-02-15 16:33:02,730 [  85818]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-profile::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-artifact-manager::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-registry::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-core::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-parameter-documenter::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.reporting:maven-reporting-api::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-sink-api::1.0-alpha-7, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-repository-metadata::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-error-diagnostics::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-cli:commons-cli::1.0, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-descriptor::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-interactivity-api::1.0-alpha-4, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading classworlds:classworlds::1.1, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-artifact::2.0.6, was also in node: null
+2026-02-15 16:33:02,731 [  85819]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-settings::2.0.6, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-model::2.0.6, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-monitor::2.0.6, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-container-default::1.0-alpha-9-stable-1, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading junit:junit::3.8.1, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::2.0.5, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.shared:maven-filtering::1.1, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.plexus:plexus-build-api::0.0.4, was also in node: null
+2026-02-15 16:33:02,732 [  85820]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-interpolation::1.13, was also in node: null
+2026-02-15 16:33:03,768 [  86856]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2026-02-15 16:33:03,913 [  87001]   WARN - #c.i.d.i.RemoteConnectionBuilder - Capture agent is not supported for JRE null
+2026-02-15 16:33:04,733 [  87821]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-surefire-plugin::2.12.4, was also in node: null
+2026-02-15 16:33:10,357 [  93445]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+Running with My Custom Runner!
+[MockRunner] Saved mock config to: /tmp/mock-runner/mock-config.json
+2026-02-15 16:33:15,264 [  98352]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-api::2.0.9, was also in node: null
+2026-02-15 16:33:15,264 [  98352]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.surefire:surefire-booter::2.12.4, was also in node: null
+2026-02-15 16:33:15,264 [  98352]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.surefire:surefire-api::2.12.4, was also in node: null
+2026-02-15 16:33:15,264 [  98352]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.surefire:maven-surefire-common::2.12.4, was also in node: null
+2026-02-15 16:33:15,264 [  98352]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.commons:commons-lang3::3.1, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.shared:maven-common-artifact-filters::1.3, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::3.0.8, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-artifact::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-project::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-settings::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-profile::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-model::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-artifact-manager::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-registry::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-core::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-parameter-documenter::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.reporting:maven-reporting-api::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-repository-metadata::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-error-diagnostics::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-descriptor::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-monitor::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-toolchain::2.0.9, was also in node: null
+2026-02-15 16:33:15,265 [  98353]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugin-tools:maven-plugin-annotations::3.1, was also in node: null
+2026-02-15 16:33:18,270 [ 101358]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-install-plugin::2.4, was also in node: null
+2026-02-15 16:33:20,277 [ 103365]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading classworlds:classworlds::1.1-alpha-2, was also in node: null
+2026-02-15 16:33:20,278 [ 103366]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::3.0.5, was also in node: null
+2026-02-15 16:33:20,278 [ 103366]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-digest::1.0, was also in node: null
+2026-02-15 16:33:21,782 [ 104870]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-deploy-plugin::2.7, was also in node: null
+2026-02-15 16:33:22,284 [ 105372]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::1.5.6, was also in node: null
+2026-02-15 16:33:22,589 [ 105677]   WARN - #c.i.o.o.e.ConfigurableExtensionPointUtil - ignore deprecated groupId: language for id: preferences.language.Kotlin.scripting
+2026-02-15 16:33:23,213 [ 106301]   WARN - #c.i.o.o.n.SettingsTreeView$MyBuilder - 'AbstractTreeBuilder' is going to be dropped soon and must not be used
+com.intellij.diagnostic.PluginException: 'AbstractTreeBuilder' is going to be dropped soon and must not be used
+	at com.intellij.diagnostic.PluginProblemReporterImpl.createPluginExceptionByClass(PluginProblemReporterImpl.java:23)
+	at com.intellij.diagnostic.PluginException.createByClass(PluginException.java:83)
+	at com.intellij.ide.util.treeView.AbstractTreeBuilder.<init>(AbstractTreeBuilder.java:60)
+	at com.intellij.ide.util.treeView.AbstractTreeBuilder.<init>(AbstractTreeBuilder.java:55)
+	at com.intellij.ide.util.treeView.AbstractTreeBuilder.<init>(AbstractTreeBuilder.java:47)
+	at com.intellij.ui.treeStructure.filtered.FilteringTreeBuilder.<init>(FilteringTreeBuilder.java:46)
+	at com.intellij.openapi.options.newEditor.SettingsTreeView$MyBuilder.<init>(SettingsTreeView.java:931)
+	at com.intellij.openapi.options.newEditor.SettingsTreeView.<init>(SettingsTreeView.java:174)
+	at com.intellij.openapi.options.newEditor.SettingsDialog.treeViewFactory(SettingsDialog.java:89)
+	at com.intellij.openapi.options.newEditor.SettingsEditor.<init>(SettingsEditor.java:194)
+	at com.intellij.openapi.options.newEditor.SettingsDialog.<init>(SettingsDialog.java:65)
+	at com.intellij.openapi.options.newEditor.SettingsDialogFactory.create(SettingsDialogFactory.java:38)
+	at com.intellij.ide.actions.ShowSettingsUtilImpl.getDialog(ShowSettingsUtilImpl.java:39)
+	at com.intellij.ide.actions.ShowSettingsUtilImpl.showSettingsDialog(ShowSettingsUtilImpl.java:90)
+	at com.intellij.ide.actions.ShowSettingsAction.perform(ShowSettingsAction.java:60)
+	at com.intellij.ide.actions.ShowSettingsAction.actionPerformed(ShowSettingsAction.java:47)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.doPerformActionOrShowPopup(ActionUtil.java:323)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.lambda$performActionDumbAwareWithCallbacks$4(ActionUtil.java:302)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.performDumbAwareWithCallbacks(ActionUtil.java:346)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.performActionDumbAwareWithCallbacks(ActionUtil.java:302)
+	at com.intellij.openapi.actionSystem.impl.ActionMenuItem.lambda$performAction$5(ActionMenuItem.java:296)
+	at com.intellij.openapi.wm.impl.FocusManagerImpl.runOnOwnContext(FocusManagerImpl.java:226)
+	at com.intellij.openapi.actionSystem.impl.ActionMenuItem.performAction(ActionMenuItem.java:289)
+	at com.intellij.openapi.actionSystem.impl.ActionMenuItem.lambda$new$0(ActionMenuItem.java:64)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+	at com.intellij.openapi.actionSystem.impl.ActionMenuItem.lambda$fireActionPerformed$4(ActionMenuItem.java:111)
+	at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:105)
+	at com.intellij.openapi.application.TransactionGuardImpl.performUserActivity(TransactionGuardImpl.java:94)
+	at com.intellij.openapi.actionSystem.impl.ActionMenuItem.fireActionPerformed(ActionMenuItem.java:111)
+	at com.intellij.ui.plaf.beg.BegMenuItemUI.doClick(BegMenuItemUI.java:526)
+	at com.intellij.ui.plaf.beg.BegMenuItemUI$MyMouseInputHandler.mouseReleased(BegMenuItemUI.java:558)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6648)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3392)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6413)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5022)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4854)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2802)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4854)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:781)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:730)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:724)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:97)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:754)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:752)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:751)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.java:909)
+	at com.intellij.ide.IdeEventQueue.dispatchMouseEvent(IdeEventQueue.java:831)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:753)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$5(IdeEventQueue.java:437)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:774)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$6(IdeEventQueue.java:436)
+	at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:113)
+	at com.intellij.ide.IdeEventQueue.performActivity(IdeEventQueue.java:615)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$7(IdeEventQueue.java:434)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:813)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:480)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:117)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:105)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:92)
+2026-02-15 16:33:24,288 [ 107376]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-site-plugin::3.3, was also in node: null
+2026-02-15 16:34:13,442 [ 156530]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.reporting:maven-reporting-exec::1.1, was also in node: null
+2026-02-15 16:34:13,442 [ 156530]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.reporting:maven-reporting-api::3.0, was also in node: null
+2026-02-15 16:34:13,442 [ 156530]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-artifact::3.0, was also in node: null
+2026-02-15 16:34:13,442 [ 156530]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.shared:maven-shared-utils::0.3, was also in node: null
+2026-02-15 16:34:13,442 [ 156530]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading com.google.code.findbugs:jsr305::2.0.1, was also in node: null
+2026-02-15 16:34:13,442 [ 156530]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.aether:aether-util::1.7, was also in node: null
+2026-02-15 16:34:13,442 [ 156530]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.eclipse.aether:aether-util::0.9.0.M2, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-core::3.0, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-repository-metadata::3.0, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-model-builder::3.0, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-aether-provider::3.0, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.aether:aether-impl::1.7, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.aether:aether-spi::1.7, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.aether:aether-api::1.7, was also in node: null
+2026-02-15 16:34:13,443 [ 156531]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.sisu:sisu-inject-plexus::1.4.2, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.sisu:sisu-inject-bean::1.4.2, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-interpolation::1.14, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-classworlds::2.2.3, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.plexus:plexus-sec-dispatcher::1.3, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.sonatype.plexus:plexus-cipher::1.4, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-model::3.0, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-plugin-api::3.0, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-settings::3.0, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-settings-builder::3.0, was also in node: null
+2026-02-15 16:34:13,444 [ 156532]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven:maven-archiver::2.4.2, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-sink-api::1.4, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-logging-api::1.4, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-container-default::1.0-alpha-30, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-core::1.4, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading xerces:xercesImpl::2.9.1, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading xml-apis:xml-apis::1.3.04, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.httpcomponents:httpclient::4.0.2, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-logging:commons-logging::1.1.1, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-codec:commons-codec::1.3, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.httpcomponents:httpcore::4.0.1, was also in node: null
+2026-02-15 16:34:13,445 [ 156533]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-module-xhtml::1.4, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-module-apt::1.4, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-module-xdoc::1.4, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-module-fml::1.4, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-module-markdown::1.4, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.pegdown:pegdown::1.2.1, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.parboiled:parboiled-java::1.1.4, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.parboiled:parboiled-core::1.1.4, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.ow2.asm:asm::4.1, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.ow2.asm:asm-tree::4.1, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.ow2.asm:asm-analysis::4.1, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.ow2.asm:asm-util::4.1, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading javax.servlet:servlet-api::2.5, was also in node: null
+2026-02-15 16:34:13,446 [ 156534]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-decoration-model::1.4, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-site-renderer::1.4, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.velocity:velocity-tools::2.0, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-beanutils:commons-beanutils::1.7.0, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-digester:commons-digester::1.8, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-chain:commons-chain::1.1, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-validator:commons-validator::1.3.1, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading dom4j:dom4j::1.1, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading sslext:sslext::1.2-0, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.struts:struts-core::1.3.8, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading antlr:antlr::2.7.2, was also in node: null
+2026-02-15 16:34:13,447 [ 156535]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.struts:struts-taglib::1.3.8, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.struts:struts-tiles::1.3.8, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-collections:commons-collections::3.2.1, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.doxia:doxia-integration-tools::1.5, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.wagon:wagon-provider-api::1.0, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-archiver::1.0, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-io::1.0, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-i18n::1.0-beta-7, was also in node: null
+2026-02-15 16:34:13,448 [ 156536]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.apache.velocity:velocity::1.5, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading oro:oro::2.0.8, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-velocity::1.1.8, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.codehaus.plexus:plexus-utils::1.5.10, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.mortbay.jetty:jetty::6.1.25, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.mortbay.jetty:servlet-api::2.5-20081211, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading org.mortbay.jetty:jetty-util::6.1.25, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-lang:commons-lang::2.5, was also in node: null
+2026-02-15 16:34:13,449 [ 156537]   WARN - #c.i.b.BuildTreeConsoleView - start event id collision found:Downloading commons-io:commons-io::1.4, was also in node: null
+2026-02-15 16:34:17,892 [ 160980]   WARN - #c.i.o.w.i.ToolWindowImpl - ToolWindow icons should be 13x13. Please fix ToolWindow (ID:  Run) or icon RasterizedImageDataLoader(classLoader=com.intellij.util.lang.PathClassLoader@1888ff2c, path=general/runWithCoverage.svg)
+2026-02-15 16:34:18,737 [ 161825]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2026-02-15 16:34:28,470 [ 171558]   WARN - #c.i.o.w.i.ToolWindowImpl - ToolWindow icons should be 13x13. Please fix ToolWindow (ID:  Run) or icon RasterizedImageDataLoader(classLoader=com.intellij.util.lang.PathClassLoader@1888ff2c, path=general/runWithCoverage.svg)
+2026-02-15 16:35:20,057 [ 223145]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+Running with My Custom Runner!
+[MockRunner] Saved mock config to: /tmp/mock-runner/mock-config.json
+2026-02-15 16:35:22,368 [ 225456]   WARN - #c.i.e.r.ExecutionUtil - Execution error without description
+java.lang.NullPointerException
+	at com.intellij.execution.ui.RunContentManagerImpl.showRunContent(RunContentManagerImpl.kt:268)
+	at com.intellij.execution.ui.RunContentManagerImpl.showRunContent(RunContentManagerImpl.kt:252)
+	at com.example.plugin.MyProgramRunner.doExecute(MyProgramRunner.java:104)
+	at com.intellij.execution.runners.GenericProgramRunner$execute$1.invoke(GenericProgramRunner.kt:20)
+	at com.intellij.execution.runners.GenericProgramRunner$execute$1.invoke(GenericProgramRunner.kt:19)
+	at com.intellij.execution.impl.ExecutionManagerImpl$startRunProfile$1.invoke(ExecutionManagerImpl.kt:173)
+	at com.intellij.execution.impl.ExecutionManagerImpl$startRunProfile$1.invoke(ExecutionManagerImpl.kt:171)
+	at com.intellij.execution.impl.ExecutionManagerImpl.doStartRunProfile$lambda-3(ExecutionManagerImpl.kt:234)
+	at com.intellij.openapi.application.TransactionGuardImpl.runWithWritingAllowed(TransactionGuardImpl.java:209)
+	at com.intellij.openapi.application.TransactionGuardImpl.access$100(TransactionGuardImpl.java:21)
+	at com.intellij.openapi.application.TransactionGuardImpl$1.run(TransactionGuardImpl.java:191)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:813)
+	at com.intellij.openapi.application.impl.ApplicationImpl$3.run(ApplicationImpl.java:429)
+	at com.intellij.openapi.application.impl.FlushQueue.doRun(FlushQueue.java:74)
+	at com.intellij.openapi.application.impl.FlushQueue.runNextEvent(FlushQueue.java:114)
+	at com.intellij.openapi.application.impl.FlushQueue.flushNow(FlushQueue.java:36)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:779)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:730)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:724)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:749)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.java:909)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:756)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$5(IdeEventQueue.java:437)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:774)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$6(IdeEventQueue.java:436)
+	at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:105)
+	at com.intellij.ide.IdeEventQueue.performActivity(IdeEventQueue.java:615)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$7(IdeEventQueue.java:434)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:813)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:480)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:117)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:105)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:92)

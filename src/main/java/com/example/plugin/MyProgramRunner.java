@@ -1,7 +1,9 @@
 package com.example.plugin;
 
 import com.example.plugin.mock.MockConfig;
+import com.example.plugin.service.MockConfigService;
 import com.example.plugin.ui.MockConfigDialog;
+import com.example.plugin.ui.MyRunnerToolWindowContent;
 import com.google.gson.Gson;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
@@ -13,12 +15,15 @@ import com.intellij.execution.runners.GenericProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.execution.ui.RunContentManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MyProgramRunner extends GenericProgramRunner {
     
@@ -44,13 +49,22 @@ public class MyProgramRunner extends GenericProgramRunner {
         
         System.out.println("Running with My Custom Runner!");
         
-        // 显示 Mock 配置对话框
-        MockConfig mockConfig = new MockConfig();
-        
-        ApplicationManager.getApplication().invokeAndWait(() -> {
-            MockConfigDialog dialog = new MockConfigDialog(environment.getProject(), mockConfig);
-            dialog.show();
+        // 显示 ToolWindow
+        ApplicationManager.getApplication().invokeLater(() -> {
+            ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(environment.getProject());
+            ToolWindow toolWindow = toolWindowManager.getToolWindow("My Runner");
+            if (toolWindow != null) {
+                toolWindow.show();
+            }
         });
+        
+        // 记录开始时间
+        String startTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        String methodName = environment.getRunProfile().getName();
+        
+        // 从 Service 获取 Mock 配置
+        MockConfigService mockConfigService = environment.getProject().getService(MockConfigService.class);
+        MockConfig mockConfig = mockConfigService.getMockConfig();
         
         // 保存 Mock 配置到临时文件
         File configFile = saveMockConfig(mockConfig);
@@ -59,6 +73,14 @@ public class MyProgramRunner extends GenericProgramRunner {
         if (state instanceof JavaParameters) {
             addAgentToJavaParameters((JavaParameters) state, configFile);
         }
+        
+        // 记录到 ToolWindow
+        ApplicationManager.getApplication().invokeLater(() -> {
+            MyRunnerToolWindowContent content = environment.getProject().getService(MyRunnerToolWindowContent.class);
+            if (content != null) {
+                content.addResult(startTime, methodName, "Starting", "-");
+            }
+        });
         
         // 执行程序并获取结果
         ExecutionResult executionResult = state.execute(environment.getExecutor(), this);

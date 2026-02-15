@@ -3,7 +3,7 @@
     <jdk version="2">
       <name value="21" />
       <type value="JavaSDK" />
-      <version value="version 21.0.9" />
+      <version value="java version &quot;21.0.9&quot;" />
       <homePath value="$USER_HOME$/.jdks/ms-21.0.9" />
       <roots>
         <annotationsPath>

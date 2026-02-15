@@ -1,0 +1,93 @@
+<maven-project-configuration>
+  <resource-processing>
+    <maven-module name="student-management">
+      <MavenModuleResourceConfiguration>
+        <id>
+          <MavenIdBean>
+            <groupId>com.student</groupId>
+            <artifactId>student-management</artifactId>
+            <version>1.0.0</version>
+          </MavenIdBean>
+        </id>
+        <directory>/home/lancelot/student-management</directory>
+        <manifest>TWFuaWZlc3QtVmVyc2lvbjogMS4wDQpDcmVhdGVkLUJ5OiBJbnRlbGxpSiBJREVBDQpCdWlsdC1CeTogbGFuY2Vsb3QNCkJ1aWxkLUpkazogMjEuMC45DQpNYWluLUNsYXNzOiBjb20uc3R1ZGVudC5TdHVkZW50TWFuYWdlbWVudEFwcA0KDQo=</manifest>
+        <classpath />
+        <delimiters-pattern>\$\{(.+?)}|@(.+?)@</delimiters-pattern>
+        <model-map>
+          <entry key="artifactId" value="student-management" />
+          <entry key="build.directory" value="/home/lancelot/student-management/target" />
+          <entry key="build.finalName" value="student-management-1.0.0" />
+          <entry key="build.location" value="20 : 12, com.student:student-management:1.0.0 /home/lancelot/student-management/pom.xml" />
+          <entry key="build.location.columnNumber" value="12" />
+          <entry key="build.location.lineNumber" value="20" />
+          <entry key="build.location.source" value="com.student:student-management:1.0.0 /home/lancelot/student-management/pom.xml" />
+          <entry key="build.location.source.location" value="/home/lancelot/student-management/pom.xml" />
+          <entry key="build.location.source.modelId" value="com.student:student-management:1.0.0" />
+          <entry key="build.outputDirectory" value="/home/lancelot/student-management/target/classes" />
+          <entry key="build.plugin.maven-ear-plugin.skinnyWars" value="false" />
+          <entry key="build.scriptSourceDirectory" value="/home/lancelot/student-management/src/main/scripts" />
+          <entry key="build.sourceDirectory" value="/home/lancelot/student-management/src/main/java" />
+          <entry key="build.testOutputDirectory" value="/home/lancelot/student-management/target/test-classes" />
+          <entry key="build.testSourceDirectory" value="/home/lancelot/student-management/src/test/java" />
+          <entry key="description" value="学生管理系统" />
+          <entry key="groupId" value="com.student" />
+          <entry key="location" value="4 : 109, com.student:student-management:1.0.0 /home/lancelot/student-management/pom.xml" />
+          <entry key="location.columnNumber" value="109" />
+          <entry key="location.lineNumber" value="4" />
+          <entry key="location.source" value="com.student:student-management:1.0.0 /home/lancelot/student-management/pom.xml" />
+          <entry key="location.source.location" value="/home/lancelot/student-management/pom.xml" />
+          <entry key="location.source.modelId" value="com.student:student-management:1.0.0" />
+          <entry key="modelEncoding" value="UTF-8" />
+          <entry key="modelVersion" value="4.0.0" />
+          <entry key="name" value="Student Management System" />
+          <entry key="packaging" value="jar" />
+          <entry key="pomFile" value="/home/lancelot/student-management/pom.xml" />
+          <entry key="propertiesLocation" value="14 : 17, com.student:student-management:1.0.0 /home/lancelot/student-management/pom.xml" />
+          <entry key="propertiesLocation.columnNumber" value="17" />
+          <entry key="propertiesLocation.lineNumber" value="14" />
+          <entry key="propertiesLocation.source" value="com.student:student-management:1.0.0 /home/lancelot/student-management/pom.xml" />
+          <entry key="propertiesLocation.source.location" value="/home/lancelot/student-management/pom.xml" />
+          <entry key="propertiesLocation.source.modelId" value="com.student:student-management:1.0.0" />
+          <entry key="reporting.outputDirectory" value="/home/lancelot/student-management/target/site" />
+          <entry key="reporting.outputDirectoryLocation" value="96 : 22, org.apache.maven:maven-model-builder:3.8.1:super-pom jar:file:/home/lancelot/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2022.3/4d343cadac04a0a31d70f6f96facfaa7f949df01/ideaIC-2022.3/plugins/maven/lib/maven3/lib/maven-model-builder-3.8.1.jar!/org/apache/maven/model/pom-4.0.0.xml" />
+          <entry key="reporting.outputDirectoryLocation.columnNumber" value="22" />
+          <entry key="reporting.outputDirectoryLocation.lineNumber" value="96" />
+          <entry key="reporting.outputDirectoryLocation.source" value="org.apache.maven:maven-model-builder:3.8.1:super-pom jar:file:/home/lancelot/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2022.3/4d343cadac04a0a31d70f6f96facfaa7f949df01/ideaIC-2022.3/plugins/maven/lib/maven3/lib/maven-model-builder-3.8.1.jar!/org/apache/maven/model/pom-4.0.0.xml" />
+          <entry key="reporting.outputDirectoryLocation.source.location" value="jar:file:/home/lancelot/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2022.3/4d343cadac04a0a31d70f6f96facfaa7f949df01/ideaIC-2022.3/plugins/maven/lib/maven3/lib/maven-model-builder-3.8.1.jar!/org/apache/maven/model/pom-4.0.0.xml" />
+          <entry key="reporting.outputDirectoryLocation.source.modelId" value="org.apache.maven:maven-model-builder:3.8.1:super-pom" />
+          <entry key="version" value="1.0.0" />
+        </model-map>
+        <properties>
+          <entry key="java.home" value="/home/lancelot/.jdks/ms-21.0.9" />
+          <entry key="java.version" value="java version &quot;21.0.9&quot;" />
+          <entry key="maven.compiler.source" value="17" />
+          <entry key="maven.compiler.target" value="17" />
+          <entry key="project.build.sourceEncoding" value="UTF-8" />
+          <entry key="settings.localRepository" value="/home/lancelot/.m2/repository" />
+        </properties>
+        <filtering-excluded-extensions />
+        <option name="escapeString" />
+        <option name="escapeWindowsPaths" value="true" />
+        <option name="overwrite" value="false" />
+        <option name="outputDirectory" />
+        <option name="testOutputDirectory" />
+        <resources>
+          <resource filtered="false">
+            <directory>/home/lancelot/student-management/src/main/resources</directory>
+            <includes />
+            <excludes />
+          </resource>
+        </resources>
+        <test-resources>
+          <resource filtered="false">
+            <directory>/home/lancelot/student-management/src/test/resources</directory>
+            <includes />
+            <excludes />
+          </resource>
+        </test-resources>
+      </MavenModuleResourceConfiguration>
+    </maven-module>
+  </resource-processing>
+  <web-artifact-cfg />
+  <ejb-client-artifact-cfg />
+</maven-project-configuration>

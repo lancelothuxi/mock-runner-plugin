@@ -1,0 +1,21 @@
+> Task :initializeIntelliJPlugin SKIPPED
+> Task :patchPluginXml UP-TO-DATE
+> Task :verifyPluginConfiguration
+> Task :compileJava UP-TO-DATE
+> Task :processResources
+> Task :classes
+> Task :instrumentCode
+> Task :agentJar
+> Task :instrumentedJar
+> Task :jar
+> Task :prepareSandbox
+
+> Task :runIde
+CompileCommand: exclude com/intellij/openapi/vfs/impl/FilePartNodeRoot.trieDescend bool exclude = true
+2026-02-15 16:51:42,077 [   1503]   WARN - #c.i.e.RunManager - Must be not called before project components initialized
+Info  | RdCoroutineScope          | 46:DefaultDispatcher-worker-29 @coroutine#407 | RdCoroutineHost overridden 
+JCEF(51:43:242): initialized stderr logger, severity=LOGSEVERITY_DISABLE
+2026-02-15 16:51:43,395 [   2821]   WARN - #c.i.o.a.i.ActionUpdater - 483 ms to grab EDT for CollapseAllAction#update@ToolwindowTitle (com.intellij.ide.actions.CollapseAllAction)
+2026-02-15 16:51:43,395 [   2821]   WARN - #c.i.o.a.i.ActionUpdater - 481 ms to grab EDT for DeviceAndSnapshotComboBoxAction#update@NavBarToolbar (com.android.tools.idea.run.deployment.DeviceAndSnapshotComboBoxAction)
+2026-02-15 16:51:45,052 [   4478]   WARN - #o.j.i.maven - Using extension org.jetbrains.idea.maven.maven3.Maven3Support@73403733 to start MavenServer
+2026-02-15 16:52:56,894 [  76320]   WARN - #c.i.o.a.i.PreCachedDataContext - 'psi.File' is requested on EDT by AddMockAction#update@EditorPopup (com.example.plugin.action.AddMockAction). See ActionUpdateThread javadoc.

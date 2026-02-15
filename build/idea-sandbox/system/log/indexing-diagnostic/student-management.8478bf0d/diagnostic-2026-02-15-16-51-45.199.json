@@ -1,0 +1,128 @@
+{
+  "appInfo" : {
+    "build" : "223.7571.182",
+    "buildDate" : "2022-11-29T15:36:40.56Z[UTC]",
+    "productCode" : "IC",
+    "generated" : "2026-02-15T08:51:45.200908262Z",
+    "os" : "Linux 6.17.0-5-generic",
+    "runtime" : "JetBrains s.r.o. 17.0.5 17.0.5+1-b653.14"
+  },
+  "runtimeInfo" : {
+    "maxMemory" : 786432000,
+    "numberOfProcessors" : 16,
+    "maxNumberOfIndexingThreads" : 15,
+    "maxSizeOfFileForIntelliSense" : 2560000,
+    "maxSizeOfFileForContentLoading" : 20971520
+  },
+  "projectIndexingHistory" : {
+    "projectName" : "student-management",
+    "times" : {
+      "indexingReason" : "On project open",
+      "scanningType" : "FULL_ON_PROJECT_OPEN",
+      "totalUpdatingTime" : 2300794400,
+      "indexingTime" : 0,
+      "contentLoadingVisibleTime" : 0,
+      "creatingIteratorsTime" : 36144815,
+      "scanFilesTime" : 2149587416,
+      "pushPropertiesTime" : 1097302,
+      "indexExtensionsTime" : 0,
+      "isAppliedAllValuesSeparately" : true,
+      "separateApplyingIndexesVisibleTime" : 0,
+      "updatingStart" : "2026-02-15T08:51:42.894582228Z",
+      "updatingEnd" : "2026-02-15T08:51:45.196215556Z",
+      "totalSuspendedTime" : 0,
+      "wasInterrupted" : false
+    },
+    "fileCount" : {
+      "numberOfFileProviders" : 6,
+      "numberOfScannedFiles" : 44283,
+      "numberOfFilesIndexedByInfrastructureExtensionsDuringScan" : 0,
+      "numberOfFilesScheduledForIndexingAfterScan" : 0,
+      "numberOfFilesIndexedByInfrastructureExtensionsDuringIndexingStage" : 0,
+      "numberOfFilesIndexedWithLoadingContent" : 0
+    },
+    "totalStatsPerFileType" : [ ],
+    "totalStatsPerIndexer" : [ ],
+    "scanningStatistics" : [ {
+      "providerName" : "JDK 21 /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.se, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jdi, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jfr, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.net, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.rmi, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.sql, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.xml, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jcmd, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.sctp, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.base, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jdeps, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jlink, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.zipfs, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.prefs, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.attach, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jshell, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jstatd, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.random, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.naming, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.editpad, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jartool, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.javadoc, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.xml.dom, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.desktop, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.logging, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.charsets, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.compiler, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.dynalink, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jconsole, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jpackage, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jsobject, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.compiler, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.net.http, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.crypto.ec, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.scripting, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.httpserver, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.jdwp.agent, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.localedata, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.management, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.naming.dns, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.naming.rmi, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.instrument, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.management, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.sql.rowset, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.xml.crypto, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.internal.ed, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.internal.le, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.nio.mapmode, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.unsupported, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.smartcardio, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.internal.opt, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.datatransfer, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.accessibility, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.hotspot.agent, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.security.auth, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.security.jgss, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.security.jgss, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.security.sasl, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.internal.vm.ci, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.management.jfr, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.management.rmi, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/java.transaction.xa, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.crypto.cryptoki, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.incubator.vector, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.internal.jvmstat, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.management.agent, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.unsupported.desktop, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.internal.vm.compiler, /home/lancelot/.jdks/ms-21.0.9/lib/src.zip!/jdk.internal.vm.compiler.management, /home/lancelot/.jdks/ms-21.0.9!/java.base, /home/lancelot/.jdks/ms-21.0.9!/java.compiler, /home/lancelot/.jdks/ms-21.0.9!/java.datatransfer, /home/lancelot/.jdks/ms-21.0.9!/java.desktop, /home/lancelot/.jdks/ms-21.0.9!/java.instrument, /home/lancelot/.jdks/ms-21.0.9!/java.logging, /home/lancelot/.jdks/ms-21.0.9!/java.management, /home/lancelot/.jdks/ms-21.0.9!/java.management.rmi, /home/lancelot/.jdks/ms-21.0.9!/java.naming, /home/lancelot/.jdks/ms-21.0.9!/java.net.http, /home/lancelot/.jdks/ms-21.0.9!/java.prefs, /home/lancelot/.jdks/ms-21.0.9!/java.rmi, /home/lancelot/.jdks/ms-21.0.9!/java.scripting, /home/lancelot/.jdks/ms-21.0.9!/java.se, /home/lancelot/.jdks/ms-21.0.9!/java.security.jgss, /home/lancelot/.jdks/ms-21.0.9!/java.security.sasl, /home/lancelot/.jdks/ms-21.0.9!/java.smartcardio, /home/lancelot/.jdks/ms-21.0.9!/java.sql, /home/lancelot/.jdks/ms-21.0.9!/java.sql.rowset, /home/lancelot/.jdks/ms-21.0.9!/java.transaction.xa, /home/lancelot/.jdks/ms-21.0.9!/java.xml, /home/lancelot/.jdks/ms-21.0.9!/java.xml.crypto, /home/lancelot/.jdks/ms-21.0.9!/jdk.accessibility, /home/lancelot/.jdks/ms-21.0.9!/jdk.attach, /home/lancelot/.jdks/ms-21.0.9!/jdk.charsets, /home/lancelot/.jdks/ms-21.0.9!/jdk.compiler, /home/lancelot/.jdks/ms-21.0.9!/jdk.crypto.cryptoki, /home/lancelot/.jdks/ms-21.0.9!/jdk.crypto.ec, /home/lancelot/.jdks/ms-21.0.9!/jdk.dynalink, /home/lancelot/.jdks/ms-21.0.9!/jdk.editpad, /home/lancelot/.jdks/ms-21.0.9!/jdk.hotspot.agent, /home/lancelot/.jdks/ms-21.0.9!/jdk.httpserver, /home/lancelot/.jdks/ms-21.0.9!/jdk.incubator.vector, /home/lancelot/.jdks/ms-21.0.9!/jdk.internal.ed, /home/lancelot/.jdks/ms-21.0.9!/jdk.internal.jvmstat, /home/lancelot/.jdks/ms-21.0.9!/jdk.internal.le, /home/lancelot/.jdks/ms-21.0.9!/jdk.internal.opt, /home/lancelot/.jdks/ms-21.0.9!/jdk.internal.vm.ci, /home/lancelot/.jdks/ms-21.0.9!/jdk.internal.vm.compiler, /home/lancelot/.jdks/ms-21.0.9!/jdk.internal.vm.compiler.management, /home/lancelot/.jdks/ms-21.0.9!/jdk.jartool, /home/lancelot/.jdks/ms-21.0.9!/jdk.javadoc, /home/lancelot/.jdks/ms-21.0.9!/jdk.jcmd, /home/lancelot/.jdks/ms-21.0.9!/jdk.jconsole, /home/lancelot/.jdks/ms-21.0.9!/jdk.jdeps, /home/lancelot/.jdks/ms-21.0.9!/jdk.jdi, /home/lancelot/.jdks/ms-21.0.9!/jdk.jdwp.agent, /home/lancelot/.jdks/ms-21.0.9!/jdk.jfr, /home/lancelot/.jdks/ms-21.0.9!/jdk.jlink, /home/lancelot/.jdks/ms-21.0.9!/jdk.jpackage, /home/lancelot/.jdks/ms-21.0.9!/jdk.jshell, /home/lancelot/.jdks/ms-21.0.9!/jdk.jsobject, /home/lancelot/.jdks/ms-21.0.9!/jdk.jstatd, /home/lancelot/.jdks/ms-21.0.9!/jdk.localedata, /home/lancelot/.jdks/ms-21.0.9!/jdk.management, /home/lancelot/.jdks/ms-21.0.9!/jdk.management.agent, /home/lancelot/.jdks/ms-21.0.9!/jdk.management.jfr, /home/lancelot/.jdks/ms-21.0.9!/jdk.naming.dns, /home/lancelot/.jdks/ms-21.0.9!/jdk.naming.rmi, /home/lancelot/.jdks/ms-21.0.9!/jdk.net, /home/lancelot/.jdks/ms-21.0.9!/jdk.nio.mapmode, /home/lancelot/.jdks/ms-21.0.9!/jdk.random, /home/lancelot/.jdks/ms-21.0.9!/jdk.sctp, /home/lancelot/.jdks/ms-21.0.9!/jdk.security.auth, /home/lancelot/.jdks/ms-21.0.9!/jdk.security.jgss, /home/lancelot/.jdks/ms-21.0.9!/jdk.unsupported, /home/lancelot/.jdks/ms-21.0.9!/jdk.unsupported.desktop, /home/lancelot/.jdks/ms-21.0.9!/jdk.xml.dom, /home/lancelot/.jdks/ms-21.0.9!/jdk.zipfs",
+      "numberOfScannedFiles" : 44046,
+      "numberOfSkippedFiles" : 0,
+      "numberOfFilesForIndexing" : 0,
+      "numberOfFilesFullyIndexedByInfrastructureExtensions" : 0,
+      "filesFullyIndexedByInfrastructureExtensions" : [ ],
+      "statusTime" : 1298882642,
+      "scanningTime" : 1344335863,
+      "timeProcessingUpToDateFiles" : 0,
+      "timeUpdatingContentLessIndexes" : 16117517,
+      "timeIndexingWithoutContent" : 0,
+      "roots" : [ ]
+    }, {
+      "providerName" : "Indexable set contributor 'com.intellij.javaee.ExternalResourcesRootsProvider@57a61605' (non-project)",
+      "numberOfScannedFiles" : 225,
+      "numberOfSkippedFiles" : 4,
+      "numberOfFilesForIndexing" : 0,
+      "numberOfFilesFullyIndexedByInfrastructureExtensions" : 0,
+      "filesFullyIndexedByInfrastructureExtensions" : [ ],
+      "statusTime" : 459464067,
+      "scanningTime" : 471674370,
+      "timeProcessingUpToDateFiles" : 0,
+      "timeUpdatingContentLessIndexes" : 393006,
+      "timeIndexingWithoutContent" : 0,
+      "roots" : [ ]
+    }, {
+      "providerName" : "Module 'student-management' (student-management)",
+      "numberOfScannedFiles" : 12,
+      "numberOfSkippedFiles" : 0,
+      "numberOfFilesForIndexing" : 0,
+      "numberOfFilesFullyIndexedByInfrastructureExtensions" : 0,
+      "filesFullyIndexedByInfrastructureExtensions" : [ ],
+      "statusTime" : 167702072,
+      "scanningTime" : 182731644,
+      "timeProcessingUpToDateFiles" : 0,
+      "timeUpdatingContentLessIndexes" : 139509,
+      "timeIndexingWithoutContent" : 0,
+      "roots" : [ ]
+    }, {
+      "providerName" : "Indexable set contributor 'com.intellij.javaee.ExternalResourcesRootsProvider@57a61605' (project)",
+      "numberOfScannedFiles" : 0,
+      "numberOfSkippedFiles" : 0,
+      "numberOfFilesForIndexing" : 0,
+      "numberOfFilesFullyIndexedByInfrastructureExtensions" : 0,
+      "filesFullyIndexedByInfrastructureExtensions" : [ ],
+      "statusTime" : 0,
+      "scanningTime" : 0,
+      "timeProcessingUpToDateFiles" : 0,
+      "timeUpdatingContentLessIndexes" : 0,
+      "timeIndexingWithoutContent" : 0,
+      "roots" : [ ]
+    }, {
+      "providerName" : "Indexable set contributor 'Scratches & Consoles' (project)",
+      "numberOfScannedFiles" : 0,
+      "numberOfSkippedFiles" : 0,
+      "numberOfFilesForIndexing" : 0,
+      "numberOfFilesFullyIndexedByInfrastructureExtensions" : 0,
+      "filesFullyIndexedByInfrastructureExtensions" : [ ],
+      "statusTime" : 0,
+      "scanningTime" : 0,
+      "timeProcessingUpToDateFiles" : 0,
+      "timeUpdatingContentLessIndexes" : 0,
+      "timeIndexingWithoutContent" : 0,
+      "roots" : [ ]
+    }, {
+      "providerName" : "Indexable set contributor 'Scratches & Consoles' (non-project)",
+      "numberOfScannedFiles" : 0,
+      "numberOfSkippedFiles" : 0,
+      "numberOfFilesForIndexing" : 0,
+      "numberOfFilesFullyIndexedByInfrastructureExtensions" : 0,
+      "filesFullyIndexedByInfrastructureExtensions" : [ ],
+      "statusTime" : 0,
+      "scanningTime" : 0,
+      "timeProcessingUpToDateFiles" : 0,
+      "timeUpdatingContentLessIndexes" : 0,
+      "timeIndexingWithoutContent" : 0,
+      "roots" : [ ]
+    } ],
+    "fileProviderStatistics" : [ ],
+    "visibleTimeToAllThreadTimeRatio" : 0.0
+  }
+}
