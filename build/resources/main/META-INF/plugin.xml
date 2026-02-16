@@ -1,5 +1,5 @@
 <idea-plugin>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <idea-version since-build="223" until-build="233.*" />
   <id>com.example.myplugin</id>
   <name>My Custom Runner Plugin</name>

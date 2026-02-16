@@ -39,7 +39,7 @@ EOF
 
 # 4. 打包
 echo "3. 打包 agent jar..."
-AGENT_JAR="build/idea-sandbox/plugins/my-idea-plugin/lib/mock-agent-1.0.4-agent.jar"
+AGENT_JAR="build/idea-sandbox/plugins/my-idea-plugin/lib/mock-agent-1.0.5-agent.jar"
 mkdir -p "$(dirname "$AGENT_JAR")"
 
 cd build/fast-compile
