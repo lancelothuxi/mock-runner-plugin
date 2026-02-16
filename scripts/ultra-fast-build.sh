@@ -16,8 +16,8 @@ mkdir -p build/fast-compile
 
 javac -d build/fast-compile \
     -cp "$GSON:$BYTEBUDDY" \
-    src/main/java/com/example/plugin/mock/*.java \
-    src/main/java/com/example/plugin/agent/MockAgent.java
+    src/main/java/io/github/lancelothuxi/idea/plugin/mock/mock/*.java \
+    src/main/java/io/github/lancelothuxi/idea/plugin/mock/agent/MockAgent.java
 
 # 2. 解压依赖到临时目录
 echo "2. 准备依赖..."
@@ -31,7 +31,7 @@ cd ../..
 mkdir -p build/fast-compile/META-INF
 cat > build/fast-compile/META-INF/MANIFEST.MF << 'EOF'
 Manifest-Version: 1.0
-Premain-Class: com.example.plugin.agent.MockAgent
+Premain-Class: io.github.lancelothuxi.idea.plugin.mock.agent.MockAgent
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
 
