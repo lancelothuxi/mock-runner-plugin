@@ -1,5 +1,19 @@
 # Gradle Build Setup Guide
 
+## Quick Fix for Java 8 Issue
+
+If you see "compatible with Java 8" error, use the provided wrapper script:
+
+```bash
+# Stop all Gradle daemons
+./gradlew-java17.sh --stop
+
+# Build with Java 17
+./gradlew-java17.sh clean build
+```
+
+This script automatically sets JAVA_HOME to Java 17.
+
 ## Java Version Issue
 
 The IntelliJ Gradle plugin requires Java 11 or higher. This project is configured for Java 17.
@@ -77,17 +91,14 @@ intellij {
 ## Quick Build Commands
 
 ```bash
-# Clean build (skip tests)
+# Use the Java 17 wrapper (recommended)
+./gradlew-java17.sh clean build -x test
+./gradlew-java17.sh test
+./gradlew-java17.sh buildPlugin
+
+# Or set JAVA_HOME manually
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ./gradlew clean build -x test
-
-# Run tests only
-./gradlew test
-
-# Build plugin distribution
-./gradlew buildPlugin
-
-# Run plugin in sandbox IDE
-./gradlew runIde
 ```
 
 ## Gradle Configuration Files
