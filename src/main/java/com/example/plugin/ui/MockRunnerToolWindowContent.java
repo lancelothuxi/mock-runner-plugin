@@ -13,6 +13,7 @@ import com.intellij.util.ui.JBUI;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,6 +61,11 @@ public class MockRunnerToolWindowContent {
                 mockTable.getColumnModel().getColumn(2).setPreferredWidth(150); // Method
                 mockTable.getColumnModel().getColumn(3).setPreferredWidth(150); // Args
                 mockTable.getColumnModel().getColumn(4).setPreferredWidth(200); // Return Value
+                mockTable.getColumnModel().getColumn(5).setPreferredWidth(80);  // Edit
+                
+                // 设置Edit按钮的渲染器和编辑器
+                mockTable.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
+                mockTable.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor());
             }
         });
         
@@ -272,9 +278,82 @@ public class MockRunnerToolWindowContent {
         return project.getService(MockRunnerToolWindowContent.class);
     }
     
+    private void openJsonEditor(MockMethodConfig method) {
+        SwingUtilities.invokeLater(() -> {
+            JsonEditorDialog dialog = new JsonEditorDialog(project, method.getReturnValue());
+            if (dialog.showAndGet()) {
+                String newValue = dialog.getJsonValue();
+                method.setReturnValue(newValue);
+                
+                // 保存配置
+                MockConfigService service = MockConfigService.getInstance(project);
+                service.saveConfig();
+                
+                // 刷新表格
+                tableModel.fireTableDataChanged();
+            }
+        });
+    }
+    
+    // 按钮渲染器
+    private class ButtonRenderer extends JButton implements TableCellRenderer {
+        public ButtonRenderer() {
+            setOpaque(true);
+        }
+        
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setText("JSON Editor");
+            return this;
+        }
+    }
+    
+    // 按钮编辑器
+    private class ButtonEditor extends DefaultCellEditor {
+        private JButton button;
+        private String label;
+        private boolean isPushed;
+        private int editingRow;
+        
+        public ButtonEditor() {
+            super(new JCheckBox());
+            button = new JButton();
+            button.setOpaque(true);
+            button.addActionListener(e -> fireEditingStopped());
+        }
+        
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            label = "JSON Editor";
+            button.setText(label);
+            isPushed = true;
+            editingRow = row;
+            return button;
+        }
+        
+        @Override
+        public Object getCellEditorValue() {
+            if (isPushed) {
+                // 打开JSON编辑器
+                MockMethodConfig method = tableModel.getMethodAt(editingRow);
+                if (method != null) {
+                    openJsonEditor(method);
+                }
+            }
+            isPushed = false;
+            return label;
+        }
+        
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+    }
+    
     // 自定义表格模型
     private class MockTableModel extends AbstractTableModel {
-        private final String[] columnNames = {"Enabled", "Class", "Method", "Args", "Return Value"};
+        private final String[] columnNames = {"Enabled", "Class", "Method", "Args", "Return Value", "Edit"};
         private List<MockMethodConfig> mockMethods = new ArrayList<>();
         
         public void setMockMethods(List<MockMethodConfig> methods) {
@@ -302,12 +381,15 @@ public class MockRunnerToolWindowContent {
             if (columnIndex == 0) {
                 return Boolean.class;
             }
+            if (columnIndex == 5) {
+                return JButton.class;
+            }
             return String.class;
         }
         
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return columnIndex == 0; // 只有Enabled列可编辑
+            return columnIndex == 0 || columnIndex == 5; // Enabled列和Edit按钮列可编辑
         }
         
         @Override
@@ -323,14 +405,20 @@ public class MockRunnerToolWindowContent {
                 case 2: return method.getMethodName();
                 case 3: return method.getSignature();
                 case 4: return method.getReturnValue();
+                case 5: return "Edit JSON";
                 default: return null;
             }
         }
         
         @Override
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
-            if (columnIndex == 0 && rowIndex < mockMethods.size()) {
-                MockMethodConfig method = mockMethods.get(rowIndex);
+            if (rowIndex >= mockMethods.size()) {
+                return;
+            }
+            
+            MockMethodConfig method = mockMethods.get(rowIndex);
+            
+            if (columnIndex == 0) {
                 method.setEnabled((Boolean) value);
                 
                 // 保存到配置服务
@@ -339,7 +427,17 @@ public class MockRunnerToolWindowContent {
                 
                 fireTableCellUpdated(rowIndex, columnIndex);
                 updateStats();
+            } else if (columnIndex == 5) {
+                // 打开JSON编辑器
+                openJsonEditor(method);
             }
+        }
+        
+        public MockMethodConfig getMethodAt(int rowIndex) {
+            if (rowIndex >= 0 && rowIndex < mockMethods.size()) {
+                return mockMethods.get(rowIndex);
+            }
+            return null;
         }
     }
 }

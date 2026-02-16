@@ -1,6 +1,7 @@
 package com.example.plugin.util;
 
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,139 +13,274 @@ import java.util.*;
 public class MockValueGenerator {
     
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Set<String> PROCESSING_TYPES = new HashSet<>(); // 防止循环引用
     
     public static String generateMockValue(PsiType returnType) {
         if (returnType == null) {
             return "null";
         }
         
+        PROCESSING_TYPES.clear();
+        return generateMockValueInternal(returnType);
+    }
+    
+    private static String generateMockValueInternal(PsiType returnType) {
         String typeName = returnType.getPresentableText();
         
         // 基本类型
         if (typeName.equals("int") || typeName.equals("Integer")) {
-            return "0";
+            return "1";
         }
         if (typeName.equals("long") || typeName.equals("Long")) {
-            return "0L";
+            return "1L";
         }
         if (typeName.equals("double") || typeName.equals("Double")) {
-            return "0.0";
+            return "1.0";
         }
         if (typeName.equals("float") || typeName.equals("Float")) {
-            return "0.0f";
+            return "1.0f";
         }
         if (typeName.equals("boolean") || typeName.equals("Boolean")) {
-            return "false";
+            return "true";
         }
         if (typeName.equals("String")) {
-            return "\"mock_string\"";
+            return "\"sample_string\"";
         }
         if (typeName.equals("void")) {
             return "void";
         }
         
-        // 集合类型
-        if (typeName.startsWith("List<") || typeName.startsWith("ArrayList<")) {
-            return "[]";
-        }
-        if (typeName.startsWith("Set<") || typeName.startsWith("HashSet<")) {
-            return "[]";
-        }
-        if (typeName.startsWith("Map<") || typeName.startsWith("HashMap<")) {
-            return "{}";
+        // 处理泛型集合类型
+        if (returnType instanceof PsiClassType) {
+            PsiClassType classType = (PsiClassType) returnType;
+            PsiClass psiClass = classType.resolve();
+            
+            if (psiClass != null) {
+                String qualifiedName = psiClass.getQualifiedName();
+                
+                // List类型
+                if ("java.util.List".equals(qualifiedName) || 
+                    "java.util.ArrayList".equals(qualifiedName) ||
+                    "java.util.LinkedList".equals(qualifiedName)) {
+                    return generateListMockValue(classType);
+                }
+                
+                // Set类型
+                if ("java.util.Set".equals(qualifiedName) || 
+                    "java.util.HashSet".equals(qualifiedName) ||
+                    "java.util.LinkedHashSet".equals(qualifiedName)) {
+                    return generateListMockValue(classType);
+                }
+                
+                // Map类型
+                if ("java.util.Map".equals(qualifiedName) || 
+                    "java.util.HashMap".equals(qualifiedName) ||
+                    "java.util.LinkedHashMap".equals(qualifiedName)) {
+                    return generateMapMockValue(classType);
+                }
+                
+                // 自定义对象类型
+                if (qualifiedName != null && !qualifiedName.startsWith("java.")) {
+                    return generateObjectJson(psiClass);
+                }
+            }
         }
         
         // 数组
         if (returnType instanceof PsiArrayType) {
-            return "[]";
-        }
-        
-        // 对象类型 - 生成 JSON
-        if (returnType instanceof PsiClassType) {
-            PsiClass psiClass = ((PsiClassType) returnType).resolve();
-            if (psiClass != null) {
-                return generateObjectJson(psiClass);
-            }
+            PsiArrayType arrayType = (PsiArrayType) returnType;
+            PsiType componentType = arrayType.getComponentType();
+            Object sampleElement = getDefaultValueObject(componentType);
+            List<Object> arrayList = new ArrayList<>();
+            arrayList.add(sampleElement);
+            return GSON.toJson(arrayList);
         }
         
         return "null";
     }
     
-    private static String generateObjectJson(PsiClass psiClass) {
-        Map<String, Object> jsonMap = new LinkedHashMap<>();
-        
-        // 获取所有字段
-        PsiField[] fields = psiClass.getAllFields();
-        for (PsiField field : fields) {
-            // 跳过静态字段
-            if (field.hasModifierProperty(PsiModifier.STATIC)) {
-                continue;
+    private static String generateListMockValue(PsiClassType listType) {
+        PsiType[] typeParameters = listType.getParameters();
+        if (typeParameters.length > 0) {
+            PsiType elementType = typeParameters[0];
+            Object sampleElement = getDefaultValueObject(elementType);
+            
+            List<Object> mockList = new ArrayList<>();
+            mockList.add(sampleElement);
+            
+            // 如果是复杂对象，添加第二个示例以显示数组结构
+            if (sampleElement instanceof Map) {
+                mockList.add(sampleElement);
             }
             
-            String fieldName = field.getName();
-            PsiType fieldType = field.getType();
-            Object defaultValue = getDefaultValue(fieldType);
+            return GSON.toJson(mockList);
+        }
+        return "[]";
+    }
+    
+    private static String generateMapMockValue(PsiClassType mapType) {
+        PsiType[] typeParameters = mapType.getParameters();
+        if (typeParameters.length >= 2) {
+            PsiType keyType = typeParameters[0];
+            PsiType valueType = typeParameters[1];
             
-            jsonMap.put(fieldName, defaultValue);
+            Object sampleKey = getDefaultValueObject(keyType);
+            Object sampleValue = getDefaultValueObject(valueType);
+            
+            Map<Object, Object> mockMap = new LinkedHashMap<>();
+            mockMap.put(sampleKey, sampleValue);
+            
+            return GSON.toJson(mockMap);
+        }
+        return "{}";
+    }
+    
+    private static String generateObjectJson(PsiClass psiClass) {
+        String qualifiedName = psiClass.getQualifiedName();
+        if (qualifiedName == null || PROCESSING_TYPES.contains(qualifiedName)) {
+            return "null"; // 防止循环引用
         }
         
-        // 如果没有字段，尝试从 getter 方法推断
-        if (jsonMap.isEmpty()) {
-            PsiMethod[] methods = psiClass.getAllMethods();
-            for (PsiMethod method : methods) {
-                String methodName = method.getName();
-                if (methodName.startsWith("get") && methodName.length() > 3) {
-                    String fieldName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
-                    PsiType returnType = method.getReturnType();
-                    if (returnType != null) {
-                        jsonMap.put(fieldName, getDefaultValue(returnType));
+        PROCESSING_TYPES.add(qualifiedName);
+        
+        try {
+            Map<String, Object> jsonMap = new LinkedHashMap<>();
+            
+            // 获取所有字段
+            PsiField[] fields = psiClass.getAllFields();
+            for (PsiField field : fields) {
+                // 跳过静态字段和常量
+                if (field.hasModifierProperty(PsiModifier.STATIC) || 
+                    field.hasModifierProperty(PsiModifier.FINAL)) {
+                    continue;
+                }
+                
+                String fieldName = field.getName();
+                PsiType fieldType = field.getType();
+                Object defaultValue = getDefaultValueObject(fieldType);
+                
+                jsonMap.put(fieldName, defaultValue);
+            }
+            
+            // 如果没有字段，尝试从 getter 方法推断
+            if (jsonMap.isEmpty()) {
+                PsiMethod[] methods = psiClass.getAllMethods();
+                for (PsiMethod method : methods) {
+                    String methodName = method.getName();
+                    if ((methodName.startsWith("get") && methodName.length() > 3) ||
+                        (methodName.startsWith("is") && methodName.length() > 2)) {
+                        
+                        String fieldName;
+                        if (methodName.startsWith("get")) {
+                            fieldName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
+                        } else {
+                            fieldName = Character.toLowerCase(methodName.charAt(2)) + methodName.substring(3);
+                        }
+                        
+                        PsiType returnType = method.getReturnType();
+                        if (returnType != null && !jsonMap.containsKey(fieldName)) {
+                            jsonMap.put(fieldName, getDefaultValueObject(returnType));
+                        }
+                    }
+                }
+            }
+            
+            return GSON.toJson(jsonMap);
+        } finally {
+            PROCESSING_TYPES.remove(qualifiedName);
+        }
+    }
+    
+    private static Object getDefaultValueObject(PsiType type) {
+        String typeName = type.getPresentableText();
+        
+        if (typeName.equals("int") || typeName.equals("Integer")) {
+            return 1;
+        }
+        if (typeName.equals("long") || typeName.equals("Long")) {
+            return 1L;
+        }
+        if (typeName.equals("double") || typeName.equals("Double")) {
+            return 1.0;
+        }
+        if (typeName.equals("float") || typeName.equals("Float")) {
+            return 1.0f;
+        }
+        if (typeName.equals("boolean") || typeName.equals("Boolean")) {
+            return true;
+        }
+        if (typeName.equals("String")) {
+            return "sample_value";
+        }
+        
+        // 处理泛型集合
+        if (type instanceof PsiClassType) {
+            PsiClassType classType = (PsiClassType) type;
+            PsiClass psiClass = classType.resolve();
+            
+            if (psiClass != null) {
+                String qualifiedName = psiClass.getQualifiedName();
+                
+                if ("java.util.List".equals(qualifiedName) || 
+                    "java.util.ArrayList".equals(qualifiedName)) {
+                    PsiType[] params = classType.getParameters();
+                    if (params.length > 0) {
+                        List<Object> list = new ArrayList<>();
+                        list.add(getDefaultValueObject(params[0]));
+                        return list;
+                    }
+                    return new ArrayList<>();
+                }
+                
+                if ("java.util.Map".equals(qualifiedName) || 
+                    "java.util.HashMap".equals(qualifiedName)) {
+                    return new LinkedHashMap<>();
+                }
+                
+                // 自定义对象
+                if (qualifiedName != null && !qualifiedName.startsWith("java.") && 
+                    !PROCESSING_TYPES.contains(qualifiedName)) {
+                    
+                    PROCESSING_TYPES.add(qualifiedName);
+                    try {
+                        Map<String, Object> objMap = new LinkedHashMap<>();
+                        
+                        // 简化版本，只获取基本字段
+                        PsiField[] fields = psiClass.getAllFields();
+                        for (PsiField field : fields) {
+                            if (!field.hasModifierProperty(PsiModifier.STATIC) && 
+                                !field.hasModifierProperty(PsiModifier.FINAL)) {
+                                
+                                String fieldName = field.getName();
+                                PsiType fieldType = field.getType();
+                                
+                                // 避免深度嵌套
+                                if (fieldType instanceof PsiClassType) {
+                                    PsiClass fieldClass = ((PsiClassType) fieldType).resolve();
+                                    if (fieldClass != null && fieldClass.getQualifiedName() != null &&
+                                        !fieldClass.getQualifiedName().startsWith("java.")) {
+                                        objMap.put(fieldName, null); // 嵌套对象设为null
+                                        continue;
+                                    }
+                                }
+                                
+                                objMap.put(fieldName, getDefaultValueObject(fieldType));
+                            }
+                        }
+                        
+                        return objMap;
+                    } finally {
+                        PROCESSING_TYPES.remove(qualifiedName);
                     }
                 }
             }
         }
         
-        return GSON.toJson(jsonMap);
-    }
-    
-    private static Object getDefaultValue(PsiType type) {
-        String typeName = type.getPresentableText();
-        
-        if (typeName.equals("int") || typeName.equals("Integer")) {
-            return 0;
-        }
-        if (typeName.equals("long") || typeName.equals("Long")) {
-            return 0;
-        }
-        if (typeName.equals("double") || typeName.equals("Double")) {
-            return 0.0;
-        }
-        if (typeName.equals("float") || typeName.equals("Float")) {
-            return 0.0;
-        }
-        if (typeName.equals("boolean") || typeName.equals("Boolean")) {
-            return false;
-        }
-        if (typeName.equals("String")) {
-            return "mock_value";
-        }
-        if (typeName.startsWith("List<") || typeName.startsWith("ArrayList<") || 
-            typeName.startsWith("Set<") || typeName.startsWith("HashSet<")) {
-            return new ArrayList<>();
-        }
-        if (typeName.startsWith("Map<") || typeName.startsWith("HashMap<")) {
-            return new LinkedHashMap<>();
-        }
         if (type instanceof PsiArrayType) {
-            return new ArrayList<>();
-        }
-        
-        // 嵌套对象
-        if (type instanceof PsiClassType) {
-            PsiClass psiClass = ((PsiClassType) type).resolve();
-            if (psiClass != null && !psiClass.getQualifiedName().startsWith("java.")) {
-                // 避免无限递归，嵌套对象返回 null
-                return null;
-            }
+            PsiArrayType arrayType = (PsiArrayType) type;
+            List<Object> list = new ArrayList<>();
+            list.add(getDefaultValueObject(arrayType.getComponentType()));
+            return list;
         }
         
         return null;
