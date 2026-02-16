@@ -19,6 +19,9 @@ dependencies {
     implementation("net.bytebuddy:byte-buddy:1.14.9")
     implementation("net.bytebuddy:byte-buddy-agent:1.14.9")
     implementation("com.google.code.gson:gson:2.10.1")
+    
+    // TestNG for testing
+    testImplementation("org.testng:testng:7.8.0")
 }
 
 intellij {
@@ -39,6 +42,11 @@ tasks {
     
     withType<JavaCompile> {
         options.encoding = "UTF-8"
+    }
+    
+    // Configure TestNG
+    test {
+        useTestNG()
     }
     
     // 创建 Agent JAR 任务
