@@ -28,6 +28,15 @@ src/test/
 
 ## Running Tests
 
+### Prerequisites
+
+**IMPORTANT**: The mock agent is automatically attached when running tests via Gradle.
+
+The Gradle `test` task is configured to:
+1. Build the agent JAR (`agentJar` task)
+2. Attach it to the test JVM with `-javaagent`
+3. Load mock configuration from `src/test/resources/mock-config-test.json`
+
 ### Method 1: Run Individual Test Class
 
 1. Open `DubboServiceTest.java` or `FeignClientTest.java`
@@ -44,15 +53,40 @@ src/test/
 ### Method 3: Run from Command Line
 
 ```bash
-# Using Gradle
-./gradlew test
+# Using Gradle (agent automatically attached)
+./gradlew-java17.sh test
 
 # Run specific test class
-./gradlew test --tests "test.dubbo.DubboServiceTest"
-./gradlew test --tests "test.feign.FeignClientTest"
+./gradlew-java17.sh test --tests "test.dubbo.DubboServiceTest"
+./gradlew-java17.sh test --tests "test.feign.FeignClientTest"
+
+# Run with verbose output to see agent loading
+./gradlew-java17.sh test --info
+```
+
+**What happens:**
+1. Gradle builds `mock-agent-1.0.6-agent.jar`
+2. Gradle starts test JVM with: `-javaagent:build/libs/mock-agent-1.0.6-agent.jar=src/test/resources/mock-config-test.json`
+3. Agent loads mock configuration
+4. Tests run with mocked interfaces
+
+**Expected output:**
+```
+✓ Mock Agent attached: /path/to/mock-agent-1.0.6-agent.jar
+✓ Mock Config: /path/to/mock-config-test.json
 ```
 
 ## Configuring Mocks
+
+### Automated Test Mocks
+
+For automated tests, mocks are pre-configured in `src/test/resources/mock-config-test.json`.
+
+This file is automatically loaded by the agent when running `./gradlew test`.
+
+**No manual configuration needed!** Just run the tests.
+
+### Manual Mock Configuration (for IDE Plugin)
 
 Before running tests, you MUST configure mocks in the Mock Runner tool window.
 

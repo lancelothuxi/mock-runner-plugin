@@ -7,7 +7,7 @@ public class TestMain {
     public static void main(String[] args) {
         System.out.println("Testing MockAgent with generic types...");
         
-        TestService service = new TestService();
+        com.test.TestService service = new com.test.TestService();
         
         // Test List<Student> - this should not throw ClassCastException anymore
         try {

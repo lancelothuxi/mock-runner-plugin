@@ -49,7 +49,29 @@ tasks {
     
     // Configure TestNG
     test {
-        useTestNG()
+        useTestNG {
+            suites("src/test/resources/testng.xml")
+        }
+        
+        // Add agent to test JVM
+        doFirst {
+            val agentJar = file("build/libs/mock-agent-1.0.6-agent.jar")
+            val mockConfig = file("src/test/resources/mock-config-test.json")
+            
+            if (agentJar.exists() && mockConfig.exists()) {
+                jvmArgs("-javaagent:${agentJar.absolutePath}=${mockConfig.absolutePath}")
+                println("✓ Mock Agent attached: ${agentJar.absolutePath}")
+                println("✓ Mock Config: ${mockConfig.absolutePath}")
+            } else {
+                println("⚠ Warning: Agent or config not found")
+                println("  Agent: ${agentJar.absolutePath} (exists: ${agentJar.exists()})")
+                println("  Config: ${mockConfig.absolutePath} (exists: ${mockConfig.exists()})")
+                println("  Tests will run without mocking")
+            }
+        }
+        
+        // Ensure agent is built before tests
+        dependsOn("agentJar")
     }
     
     // 创建 Agent JAR 任务

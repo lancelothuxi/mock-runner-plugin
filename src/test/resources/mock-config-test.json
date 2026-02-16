@@ -1,0 +1,71 @@
+{
+  "mockRules": {
+    "test.dubbo.DubboOrderService.getOrderById": {
+      "returnValue": "{\"orderId\":12345,\"userId\":100,\"orderNo\":\"ORD-2026-001\",\"totalAmount\":299.99,\"status\":\"COMPLETED\"}",
+      "returnType": "test.dubbo.OrderDTO",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.dubbo.DubboOrderService.getOrdersByUserId": {
+      "returnValue": "[{\"orderId\":12345,\"userId\":100,\"orderNo\":\"ORD-2026-001\",\"totalAmount\":299.99,\"status\":\"COMPLETED\"},{\"orderId\":12346,\"userId\":100,\"orderNo\":\"ORD-2026-002\",\"totalAmount\":599.99,\"status\":\"SHIPPED\"}]",
+      "returnType": "java.util.List<test.dubbo.OrderDTO>",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.dubbo.DubboOrderService.createOrder": {
+      "returnValue": "{\"orderId\":99999,\"userId\":100,\"orderNo\":\"ORD-2026-NEW\",\"totalAmount\":199.99,\"status\":\"PENDING\"}",
+      "returnType": "test.dubbo.OrderDTO",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.dubbo.DubboOrderService.cancelOrder": {
+      "returnValue": "true",
+      "returnType": "boolean",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.dubbo.DubboOrderService.getOrderCount": {
+      "returnValue": "5",
+      "returnType": "int",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.feign.FeignUserClient.getUser": {
+      "returnValue": "{\"id\":1,\"username\":\"john_doe\",\"email\":\"john@example.com\",\"phone\":\"+1234567890\",\"role\":\"ADMIN\",\"status\":\"ACTIVE\"}",
+      "returnType": "test.feign.UserResponse",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.feign.FeignUserClient.getAllUsers": {
+      "returnValue": "[{\"id\":1,\"username\":\"john_doe\",\"email\":\"john@example.com\",\"phone\":\"+1234567890\",\"role\":\"ADMIN\",\"status\":\"ACTIVE\"},{\"id\":2,\"username\":\"jane_smith\",\"email\":\"jane@example.com\",\"phone\":\"+0987654321\",\"role\":\"USER\",\"status\":\"ACTIVE\"}]",
+      "returnType": "java.util.List<test.feign.UserResponse>",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.feign.FeignUserClient.createUser": {
+      "returnValue": "{\"id\":999,\"username\":\"new_user\",\"email\":\"newuser@example.com\",\"phone\":\"+1111111111\",\"role\":\"USER\",\"status\":\"ACTIVE\"}",
+      "returnType": "test.feign.UserResponse",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.feign.FeignUserClient.updateUser": {
+      "returnValue": "{\"id\":1,\"username\":\"john_doe\",\"email\":\"john.updated@example.com\",\"phone\":\"+9999999999\",\"role\":\"SUPER_ADMIN\",\"status\":\"ACTIVE\"}",
+      "returnType": "test.feign.UserResponse",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.feign.FeignUserClient.deleteUser": {
+      "returnValue": "",
+      "returnType": "void",
+      "enabled": true,
+      "throwException": false
+    },
+    "test.feign.FeignUserClient.searchUsers": {
+      "returnValue": "[{\"id\":1,\"username\":\"john_doe\",\"email\":\"john@example.com\",\"phone\":\"+1234567890\",\"role\":\"ADMIN\",\"status\":\"ACTIVE\"}]",
+      "returnType": "java.util.List<test.feign.UserResponse>",
+      "enabled": true,
+      "throwException": false
+    }
+  },
+  "mockMethods": []
+}
