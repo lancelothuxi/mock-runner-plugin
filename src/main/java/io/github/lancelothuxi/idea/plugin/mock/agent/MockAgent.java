@@ -10,6 +10,7 @@ import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.description.type.TypeDescription;
 
 import java.io.FileReader;
 import java.lang.instrument.Instrumentation;
@@ -57,6 +58,7 @@ public class MockAgent {
             .type(ElementMatchers.any())
             .transform((builder, typeDescription, classLoader, module, protectionDomain) -> {
                 String className = typeDescription.getName();
+                boolean isInterface = typeDescription.isInterface();
                 
                 for (Map.Entry<String, MockConfig.MockRule> entry : mockConfig.getAllRules().entrySet()) {
                     String key = entry.getKey();
@@ -65,9 +67,17 @@ public class MockAgent {
                         MockConfig.MockRule rule = entry.getValue();
                         
                         if (rule.isEnabled()) {
-                            LOG.info("[MockAgent] *** Intercepting " + className + "." + methodName + " ***");
-                            builder = builder.method(ElementMatchers.named(methodName))
-                                .intercept(MethodDelegation.to(Interceptor.class));
+                            LOG.info("[MockAgent] *** Intercepting " + className + "." + methodName + " (interface: " + isInterface + ") ***");
+                            
+                            if (isInterface) {
+                                // For interfaces (Dubbo/Feign), use InterfaceInterceptor without SuperCall
+                                builder = builder.method(ElementMatchers.named(methodName))
+                                    .intercept(MethodDelegation.to(InterfaceInterceptor.class));
+                            } else {
+                                // For concrete classes, use regular Interceptor with SuperCall
+                                builder = builder.method(ElementMatchers.named(methodName))
+                                    .intercept(MethodDelegation.to(Interceptor.class));
+                            }
                         }
                     }
                 }
@@ -131,6 +141,13 @@ public class MockAgent {
 
                 if (rule != null && rule.isEnabled()) {
                     LOG.info("[MockAgent] Found rule - returnValue: " + rule.getReturnValue() + ", returnType: " + rule.getReturnType());
+                    
+                    // Check if this is exception mode
+                    if (rule.isThrowException()) {
+                        LOG.info("[MockAgent] *** THROWING EXCEPTION: " + rule.getExceptionType() + " ***");
+                        throw createException(rule.getExceptionType(), rule.getExceptionMessage());
+                    }
+                    
                     Object mockValue = parseMockValue(rule.getReturnValue(), rule.getReturnType());
                     LOG.info("[MockAgent] *** RETURNING MOCK VALUE: " + mockValue + " (class: " + (mockValue != null ? mockValue.getClass().getName() : "null") + ") ***");
                     return mockValue;
@@ -225,6 +242,77 @@ public class MockAgent {
                 LOG.log(Level.SEVERE, "[MockAgent] Failed to parse mock value", e);
                 return null;
             }
+        }
+        
+        private static Exception createException(String exceptionType, String message) throws Exception {
+            try {
+                Class<?> exceptionClass = Class.forName(exceptionType);
+                if (Exception.class.isAssignableFrom(exceptionClass)) {
+                    return (Exception) exceptionClass.getConstructor(String.class).newInstance(message);
+                }
+            } catch (Exception e) {
+                LOG.warning("[MockAgent] Failed to create exception: " + exceptionType + ", using RuntimeException");
+            }
+            return new RuntimeException(message);
+        }
+    }
+    
+    /**
+     * Interceptor for interface methods (Dubbo/Feign) - no SuperCall needed
+     */
+    public static class InterfaceInterceptor {
+
+        @RuntimeType
+        public static Object intercept(@Origin Method method,
+                                        @AllArguments Object[] args) throws Exception {
+            try {
+                LOG.info("[MockAgent] *** Interface method called: " + method.getDeclaringClass().getName() + "." + method.getName() + " ***");
+
+                MockConfig config = MockAgent.mockConfig;
+                if (config == null) {
+                    LOG.severe("[MockAgent] Config is null for interface method!");
+                    throw new IllegalStateException("MockAgent config is null");
+                }
+
+                String className = method.getDeclaringClass().getName();
+                String methodName = method.getName();
+
+                LOG.info("[MockAgent] Looking for mock rule: " + className + "." + methodName);
+                MockConfig.MockRule rule = config.getMockRule(className, methodName);
+
+                if (rule != null && rule.isEnabled()) {
+                    LOG.info("[MockAgent] Found rule - returnValue: " + rule.getReturnValue() + ", returnType: " + rule.getReturnType());
+                    
+                    // Check if this is exception mode
+                    if (rule.isThrowException()) {
+                        LOG.info("[MockAgent] *** THROWING EXCEPTION: " + rule.getExceptionType() + " ***");
+                        throw createException(rule.getExceptionType(), rule.getExceptionMessage());
+                    }
+                    
+                    Object mockValue = Interceptor.parseMockValue(rule.getReturnValue(), rule.getReturnType());
+                    LOG.info("[MockAgent] *** RETURNING MOCK VALUE: " + mockValue + " (class: " + (mockValue != null ? mockValue.getClass().getName() : "null") + ") ***");
+                    return mockValue;
+                } else {
+                    LOG.warning("[MockAgent] No mock rule found for interface method: " + className + "." + methodName);
+                    throw new UnsupportedOperationException("No mock configured for interface method: " + className + "." + methodName);
+                }
+
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "[MockAgent] Exception in interface interceptor", e);
+                throw e;
+            }
+        }
+        
+        private static Exception createException(String exceptionType, String message) throws Exception {
+            try {
+                Class<?> exceptionClass = Class.forName(exceptionType);
+                if (Exception.class.isAssignableFrom(exceptionClass)) {
+                    return (Exception) exceptionClass.getConstructor(String.class).newInstance(message);
+                }
+            } catch (Exception e) {
+                LOG.warning("[MockAgent] Failed to create exception: " + exceptionType + ", using RuntimeException");
+            }
+            return new RuntimeException(message);
         }
     }
 }

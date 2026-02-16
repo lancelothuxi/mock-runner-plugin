@@ -11,6 +11,7 @@
         
         Features:
         - Runtime method mocking with Java Agent
+        - Full support for Dubbo and Feign interface-based RPC calls
         - Visual configuration UI
         - JSON editor for complex return values
         - Exception mocking support

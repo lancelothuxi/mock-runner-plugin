@@ -5,6 +5,23 @@ All notable changes to the Mock Runner plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-02-16
+
+### Added
+- Full support for Dubbo and Feign interface-based RPC calls
+- Automatic detection of interface vs concrete class methods
+- Separate `InterfaceInterceptor` for interface methods (no SuperCall needed)
+- Enhanced documentation with Dubbo/Feign usage examples
+
+### Changed
+- Agent now checks if target is interface and uses appropriate interceptor
+- Improved logging to show interface detection status
+
+### Technical Details
+- Interface methods are intercepted without `@SuperCall` parameter
+- Concrete class methods continue to use `@SuperCall` for fallback to original implementation
+- Both interceptors share the same mock value parsing logic
+
 ## [1.0.5] - 2026-02-16
 
 ### Added
