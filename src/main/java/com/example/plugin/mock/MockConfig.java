@@ -44,7 +44,11 @@ public class MockConfig implements Serializable {
         mockMethods.add(methodConfig);
         
         // 同时添加到 mockRules，供 Agent 使用
-        String returnType = inferReturnType(methodConfig.getReturnValue());
+        // 使用配置中的 returnType，如果没有则推断
+        String returnType = methodConfig.getReturnType();
+        if (returnType == null || returnType.isEmpty()) {
+            returnType = inferReturnType(methodConfig.getReturnValue());
+        }
         MockRule rule = new MockRule(methodConfig.getReturnValue(), returnType);
         rule.setEnabled(methodConfig.isEnabled());
         addMockRule(methodConfig.getClassName(), methodConfig.getMethodName(), rule);
@@ -57,7 +61,12 @@ public class MockConfig implements Serializable {
     public void rebuildMockRules() {
         mockRules.clear();
         for (MockMethodConfig methodConfig : mockMethods) {
-            String returnType = inferReturnType(methodConfig.getReturnValue());
+            // 使用配置中的 returnType，如果没有则推断
+            String returnType = methodConfig.getReturnType();
+            if (returnType == null || returnType.isEmpty()) {
+                returnType = inferReturnType(methodConfig.getReturnValue());
+            }
+            System.out.println("[MockConfig] rebuildMockRules: " + methodConfig.getClassName() + "." + methodConfig.getMethodName() + " -> returnType: " + returnType);
             MockRule rule = new MockRule(methodConfig.getReturnValue(), returnType);
             rule.setEnabled(methodConfig.isEnabled());
             addMockRule(methodConfig.getClassName(), methodConfig.getMethodName(), rule);

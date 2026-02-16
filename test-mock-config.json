@@ -1,0 +1,18 @@
+{
+  "mockMethods": [
+    {
+      "className": "com.test.TestService",
+      "methodName": "getStudents",
+      "returnType": "List<com.student.Student>",
+      "returnValue": "[{\"name\":\"John Doe\",\"age\":25,\"email\":\"john@example.com\"},{\"name\":\"Jane Smith\",\"age\":23,\"email\":\"jane@example.com\"}]",
+      "enabled": true
+    },
+    {
+      "className": "com.test.TestService", 
+      "methodName": "getStudent",
+      "returnType": "com.student.Student",
+      "returnValue": "{\"name\":\"Alice Johnson\",\"age\":22,\"email\":\"alice@example.com\"}",
+      "enabled": true
+    }
+  ]
+}

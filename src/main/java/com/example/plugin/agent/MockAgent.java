@@ -2,6 +2,7 @@ package com.example.plugin.agent;
 
 import com.example.plugin.mock.MockConfig;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
@@ -13,67 +14,50 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.io.FileReader;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Mock JavaAgent - 使用 ByteBuddy MethodDelegation 拦截方法调用
- */
 public class MockAgent {
     
     public static final Logger LOG = Logger.getLogger(MockAgent.class.getName());
     public static MockConfig mockConfig;
     
     public static void premain(String agentArgs, Instrumentation inst) {
-        System.out.println("========================================");
-        System.out.println("[MockAgent] Starting Mock Agent...");
-        System.out.println("[MockAgent] Agent args: " + agentArgs);
-        System.out.println("========================================");
-        
         LOG.info("========================================");
         LOG.info("[MockAgent] Starting Mock Agent...");
         LOG.info("[MockAgent] Agent args: " + agentArgs);
         LOG.info("========================================");
         
-        // 加载 Mock 配置
         if (agentArgs != null && !agentArgs.isEmpty()) {
-            System.out.println("[MockAgent] Loading config from: " + agentArgs);
             loadMockConfig(agentArgs);
         } else {
-            System.err.println("[MockAgent] No config file path provided!");
             LOG.severe("[MockAgent] No config file path provided!");
         }
         
         if (mockConfig == null) {
-            System.err.println("[MockAgent] mockConfig is null after loading!");
             LOG.severe("[MockAgent] mockConfig is null after loading!");
             return;
         }
         
-        System.out.println("[MockAgent] Config loaded, checking rules...");
-        
         if (mockConfig.getAllRules().isEmpty()) {
-            System.out.println("[MockAgent] No mock rules configured");
             LOG.warning("[MockAgent] No mock rules configured");
+            LOG.info("[MockAgent] mockRules size: " + mockConfig.getAllRules().size());
             return;
         }
         
-        System.out.println("[MockAgent] Loaded " + mockConfig.getAllRules().size() + " mock rules");
         LOG.info("[MockAgent] Loaded " + mockConfig.getAllRules().size() + " mock rules");
         for (Map.Entry<String, MockConfig.MockRule> entry : mockConfig.getAllRules().entrySet()) {
-            System.out.println("[MockAgent]   - " + entry.getKey() + " -> " + entry.getValue().getReturnValue());
-            LOG.info("[MockAgent]   - " + entry.getKey() + " -> " + entry.getValue().getReturnValue());
+            MockConfig.MockRule rule = entry.getValue();
+            LOG.info("[MockAgent]   - " + entry.getKey() + " -> " + rule.getReturnValue() + " (type: " + rule.getReturnType() + ")");
         }
         
-        // 使用 ByteBuddy 构建 Agent
         new AgentBuilder.Default()
             .type(ElementMatchers.any())
             .transform((builder, typeDescription, classLoader, module, protectionDomain) -> {
                 String className = typeDescription.getName();
                 
-                // 检查是否有该类的 Mock 规则
                 for (Map.Entry<String, MockConfig.MockRule> entry : mockConfig.getAllRules().entrySet()) {
                     String key = entry.getKey();
                     if (key.startsWith(className + ".")) {
@@ -81,10 +65,7 @@ public class MockAgent {
                         MockConfig.MockRule rule = entry.getValue();
                         
                         if (rule.isEnabled()) {
-                            System.out.println("[MockAgent] *** Intercepting " + className + "." + methodName + " ***");
                             LOG.info("[MockAgent] *** Intercepting " + className + "." + methodName + " ***");
-                            
-                            // 使用 MethodDelegation 拦截方法
                             builder = builder.method(ElementMatchers.named(methodName))
                                 .intercept(MethodDelegation.to(Interceptor.class));
                         }
@@ -95,9 +76,6 @@ public class MockAgent {
             })
             .installOn(inst);
         
-        System.out.println("========================================");
-        System.out.println("[MockAgent] Mock Agent installed successfully");
-        System.out.println("========================================");
         LOG.info("========================================");
         LOG.info("[MockAgent] Mock Agent installed successfully");
         LOG.info("========================================");
@@ -113,7 +91,6 @@ public class MockAgent {
                 LOG.info("[MockAgent] Config loaded successfully");
                 LOG.info("[MockAgent] mockRules size: " + mockConfig.getAllRules().size());
                 
-                // 如果 mockRules 为空但 mockMethods 不为空，重建 mockRules
                 if (mockConfig.getAllRules().isEmpty() && !mockConfig.getMockMethods().isEmpty()) {
                     LOG.info("[MockAgent] mockRules is empty, rebuilding from mockMethods...");
                     mockConfig.rebuildMockRules();
@@ -127,58 +104,55 @@ public class MockAgent {
         }
     }
     
-    /**
-     * ByteBuddy MethodDelegation 拦截器
-     */
+    public static MockConfig getMockConfig() {
+        return mockConfig;
+    }
+    
     public static class Interceptor {
-        
+
         @RuntimeType
         public static Object intercept(@Origin Method method,
                                         @AllArguments Object[] args,
-                                        @SuperCall Callable<?> zuper) throws Exception {
+                                        @SuperCall java.util.concurrent.Callable<?> zuper) throws Exception {
             try {
-                System.out.println("[MockAgent] *** Method called: " + method.getDeclaringClass().getName() + "." + method.getName() + " ***");
                 LOG.info("[MockAgent] *** Method called: " + method.getDeclaringClass().getName() + "." + method.getName() + " ***");
-                
+
                 MockConfig config = MockAgent.mockConfig;
                 if (config == null) {
-                    System.err.println("[MockAgent] Config is null!");
                     LOG.warning("[MockAgent] Config is null!");
                     return zuper.call();
                 }
-                
+
                 String className = method.getDeclaringClass().getName();
                 String methodName = method.getName();
-                
-                System.out.println("[MockAgent] Looking for mock rule: " + className + "." + methodName);
+
                 LOG.info("[MockAgent] Looking for mock rule: " + className + "." + methodName);
-                
                 MockConfig.MockRule rule = config.getMockRule(className, methodName);
-                
+
                 if (rule != null && rule.isEnabled()) {
+                    LOG.info("[MockAgent] Found rule - returnValue: " + rule.getReturnValue() + ", returnType: " + rule.getReturnType());
                     Object mockValue = parseMockValue(rule.getReturnValue(), rule.getReturnType());
-                    System.out.println("[MockAgent] *** RETURNING MOCK VALUE: " + mockValue + " (class: " + (mockValue != null ? mockValue.getClass().getName() : "null") + ") ***");
                     LOG.info("[MockAgent] *** RETURNING MOCK VALUE: " + mockValue + " (class: " + (mockValue != null ? mockValue.getClass().getName() : "null") + ") ***");
                     return mockValue;
                 } else {
-                    System.out.println("[MockAgent] No mock rule found or rule disabled, calling original method");
                     LOG.info("[MockAgent] No mock rule found or rule disabled, calling original method");
                     return zuper.call();
                 }
+
             } catch (Exception e) {
-                System.err.println("[MockAgent] Exception in interceptor: " + e.getMessage());
                 LOG.log(Level.SEVERE, "[MockAgent] Exception in interceptor", e);
                 throw e;
             }
         }
-        
-        private static Object parseMockValue(String value, String type) {
+
+        public static Object parseMockValue(String value, String type) {
+            LOG.info("[MockAgent] *** parseMockValue called with value: " + value + ", type: " + type + " ***");
+                
             if (value == null) {
                 return null;
             }
-            
+
             try {
-                // 处理基本类型
                 switch (type) {
                     case "int":
                     case "java.lang.Integer":
@@ -198,11 +172,32 @@ public class MockAgent {
                     case "java.lang.String":
                         return value;
                 }
-                
-                // 对于复杂类型，使用 Gson 解析
+
                 if (value.startsWith("[") || value.startsWith("{")) {
                     Gson gson = new Gson();
-                    
+
+                    // Handle generic types like List<Student>
+                    if (type.contains("<") && type.contains(">")) {
+                        LOG.info("[MockAgent] Processing generic type: " + type);
+                        
+                        // Handle List<ClassName>
+                        if ((type.startsWith("List<") || type.startsWith("java.util.List<")) && type.endsWith(">")) {
+                            int startIdx = type.indexOf('<'); String innerType = type.substring(startIdx + 1, type.length() - 1);
+                            LOG.info("[MockAgent] Extracted inner type: " + innerType);
+                            try {
+                                Class<?> innerClass = Class.forName(innerType);
+                                Type listType = TypeToken.getParameterized(java.util.List.class, innerClass).getType();
+                                Object result = gson.fromJson(value, listType);
+                                LOG.info("[MockAgent] Successfully parsed List with proper types: " + result);
+                                return result;
+                            } catch (ClassNotFoundException e) {
+                                LOG.warning("[MockAgent] Class not found: " + innerType + ", error: " + e.getMessage());
+                                return gson.fromJson(value, java.util.List.class);
+                            }
+                        }
+                    }
+
+                    // Handle non-generic types
                     if (type.contains("List") || type.equals("java.util.List")) {
                         return gson.fromJson(value, java.util.List.class);
                     } else if (type.contains("Map") || type.equals("java.util.Map")) {
@@ -210,8 +205,11 @@ public class MockAgent {
                     } else {
                         try {
                             Class<?> clazz = Class.forName(type);
-                            return gson.fromJson(value, clazz);
+                            Object result = gson.fromJson(value, clazz);
+                            LOG.info("[MockAgent] Parsed with Class.forName: " + result);
+                            return result;
                         } catch (ClassNotFoundException e) {
+                            LOG.warning("[MockAgent] Class not found: " + type + ", falling back to generic parsing");
                             if (value.startsWith("[")) {
                                 return gson.fromJson(value, java.util.List.class);
                             } else {
@@ -220,9 +218,9 @@ public class MockAgent {
                         }
                     }
                 }
-                
+
                 return value;
-                
+
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "[MockAgent] Failed to parse mock value", e);
                 return null;

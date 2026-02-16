@@ -106,7 +106,7 @@ public class MockRunConfigurationExtension extends com.intellij.execution.RunCon
                         java.util.Optional<java.nio.file.Path> agentJar = files
                             .filter(p -> p.getFileName().toString().startsWith("mock-agent") && 
                                        p.getFileName().toString().endsWith(".jar"))
-                            .findFirst();
+                            .max(java.util.Comparator.comparing(p -> p.getFileName().toString()));
                         
                         if (agentJar.isPresent()) {
                             String agentPath = agentJar.get().toAbsolutePath().toString();

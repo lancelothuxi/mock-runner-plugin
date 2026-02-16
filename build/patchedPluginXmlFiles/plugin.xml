@@ -1,5 +1,5 @@
 <idea-plugin>
-  <version>1.0.0</version>
+  <version>1.0.3</version>
   <idea-version since-build="223" until-build="233.*" />
   <id>com.example.myplugin</id>
   <name>My Custom Runner Plugin</name>
@@ -10,19 +10,19 @@
   <depends>com.intellij.modules.java</depends>
   <extensions defaultExtensionNs="com.intellij">
     <!-- 注册自定义程序运行器 - Run 模式 -->
-    <programRunner implementation="com.example.plugin.MyProgramRunner" />
+    <programRunner implementation="com.example.plugin.MockRunner" />
     <!-- 注册自定义程序运行器 - Debug 模式 -->
-    <programRunner implementation="com.example.plugin.MyDebugProgramRunner" />
+    <programRunner implementation="com.example.plugin.MockDebugRunner" />
     <!-- 注册自定义执行器 - Run with Mock -->
-    <executor implementation="com.example.plugin.MyCustomExecutor" order="last" />
+    <executor implementation="com.example.plugin.MockRunExecutor" order="last" />
     <!-- 注册自定义执行器 - Debug with Mock -->
-    <executor implementation="com.example.plugin.MyDebugExecutor" order="last" />
+    <executor implementation="com.example.plugin.MockDebugExecutor" order="last" />
     <!-- 注册 RunConfiguration 扩展 - 自动添加 Mock Agent -->
     <runConfigurationExtension implementation="com.example.plugin.extension.MockRunConfigurationExtension" />
     <!-- 注册 ToolWindow - 改为右侧边栏，使用自定义图标 -->
-    <toolWindow id="My Runner" anchor="right" factoryClass="com.example.plugin.ui.MyRunnerToolWindowFactory" icon="/icons/mockRunner.svg" />
+    <toolWindow id="Mock Runner" anchor="right" factoryClass="com.example.plugin.ui.RunnerToolWindowFactory" icon="/icons/mockRunner.svg" />
     <!-- 注册 Service -->
-    <projectService serviceImplementation="com.example.plugin.ui.MyRunnerToolWindowContent" />
+    <projectService serviceImplementation="com.example.plugin.ui.MockRunnerToolWindowContent" />
     <projectService serviceImplementation="com.example.plugin.service.MockConfigService" />
     <!-- 注册 LineMarker - 显示 Mock 图标 -->
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.example.plugin.marker.MockedMethodLineMarkerProvider" />

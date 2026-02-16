@@ -52,9 +52,12 @@ public class AddMockAction extends AnAction {
         if (dialog.showAndGet()) {
             String mockValue = dialog.getMockValue();
             
+            // 获取完整的返回类型字符串（包含泛型）
+            String returnTypeString = returnType != null ? returnType.getCanonicalText() : "void";
+            
             // 添加到 Mock 配置
             MockConfigService service = project.getService(MockConfigService.class);
-            service.addMockMethod(className, methodName, signature, mockValue);
+            service.addMockMethod(className, methodName, signature, mockValue, returnTypeString);
             
             Messages.showInfoMessage(
                 project,

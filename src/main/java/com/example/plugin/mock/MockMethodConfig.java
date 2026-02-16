@@ -9,6 +9,7 @@ public class MockMethodConfig implements Serializable {
     private String methodName;
     private String signature;
     private String returnValue;
+    private String returnType;
     private boolean enabled = true;
     
     public String getClassName() {
@@ -41,6 +42,14 @@ public class MockMethodConfig implements Serializable {
     
     public void setReturnValue(String returnValue) {
         this.returnValue = returnValue;
+    }
+    
+    public String getReturnType() {
+        return returnType;
+    }
+    
+    public void setReturnType(String returnType) {
+        this.returnType = returnType;
     }
     
     public boolean isEnabled() {
