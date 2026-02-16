@@ -92,7 +92,8 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
         });
     }
     
-    public void addMockMethod(String className, String methodName, String signature, String returnValue, String returnType) {
+    public void addMockMethod(String className, String methodName, String signature, String returnValue, String returnType,
+                              boolean throwException, String exceptionType, String exceptionMessage) {
         // 检查是否已存在相同的mock配置
         if (mockConfig.hasMockMethod(className, methodName, signature)) {
             LOG.info("Mock method already exists, updating: " + className + "." + methodName + signature);
@@ -104,6 +105,9 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
         methodConfig.setSignature(signature);
         methodConfig.setReturnValue(returnValue);
         methodConfig.setReturnType(returnType);
+        methodConfig.setThrowException(throwException);
+        methodConfig.setExceptionType(exceptionType);
+        methodConfig.setExceptionMessage(exceptionMessage);
         
         mockConfig.addMockMethod(methodConfig);
         

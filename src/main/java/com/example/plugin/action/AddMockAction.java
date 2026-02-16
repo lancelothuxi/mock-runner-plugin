@@ -47,17 +47,31 @@ public class AddMockAction extends AnAction {
         String signature = getMethodSignature(method);
         PsiType returnType = method.getReturnType();
         
+        // 检查是否是 void 方法
+        if (returnType == null || returnType.equals(PsiType.VOID)) {
+            Messages.showWarningDialog(
+                project,
+                "Cannot mock void methods. Only methods with return values can be mocked.",
+                "Cannot Mock Void Method"
+            );
+            return;
+        }
+        
         // 使用新的对话框
         AddMockDialog dialog = new AddMockDialog(project, className, methodName, signature, returnType);
         if (dialog.showAndGet()) {
             String mockValue = dialog.getMockValue();
+            boolean throwException = dialog.isThrowException();
+            String exceptionType = dialog.getExceptionType();
+            String exceptionMessage = dialog.getExceptionMessage();
             
             // 获取完整的返回类型字符串（包含泛型）
             String returnTypeString = returnType != null ? returnType.getCanonicalText() : "void";
             
             // 添加到 Mock 配置
             MockConfigService service = project.getService(MockConfigService.class);
-            service.addMockMethod(className, methodName, signature, mockValue, returnTypeString);
+            service.addMockMethod(className, methodName, signature, mockValue, returnTypeString, 
+                                throwException, exceptionType, exceptionMessage);
             
             Messages.showInfoMessage(
                 project,

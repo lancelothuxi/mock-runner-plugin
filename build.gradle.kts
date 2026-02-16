@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.example"
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     maven { url = uri("https://maven.aliyun.com/repository/public") }

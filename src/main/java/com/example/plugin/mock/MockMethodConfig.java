@@ -11,6 +11,9 @@ public class MockMethodConfig implements Serializable {
     private String returnValue;
     private String returnType;
     private boolean enabled = true;
+    private boolean throwException = false;
+    private String exceptionType = "java.lang.RuntimeException";
+    private String exceptionMessage = "Mocked exception";
     
     public String getClassName() {
         return className;
@@ -58,6 +61,30 @@ public class MockMethodConfig implements Serializable {
     
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    public boolean isThrowException() {
+        return throwException;
+    }
+    
+    public void setThrowException(boolean throwException) {
+        this.throwException = throwException;
+    }
+    
+    public String getExceptionType() {
+        return exceptionType;
+    }
+    
+    public void setExceptionType(String exceptionType) {
+        this.exceptionType = exceptionType;
+    }
+    
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+    
+    public void setExceptionMessage(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
     }
     
     public String getFullMethodName() {
