@@ -2,6 +2,33 @@
 
 Comprehensive TestNG tests demonstrating Dubbo and Feign interface mocking.
 
+## Directory Structure (Maven Standard)
+
+```
+src/test/
+├── java/test/                          # Test source files
+│   ├── dubbo/                          # Dubbo RPC tests
+│   │   ├── DubboOrderService.java
+│   │   ├── OrderDTO.java
+│   │   ├── CreateOrderRequest.java
+│   │   └── DubboServiceTest.java
+│   ├── feign/                          # Feign HTTP client tests
+│   │   ├── FeignUserClient.java
+│   │   ├── UserResponse.java
+│   │   ├── CreateUserRequest.java
+│   │   ├── UpdateUserRequest.java
+│   │   └── FeignClientTest.java
+│   ├── InterfaceMockTest.java          # Generic interface test
+│   ├── User.java                       # Test entities
+│   ├── UserServiceApi.java
+│   ├── Student.java
+│   ├── TestMain.java
+│   └── TestService.java
+├── resources/                          # Test resources
+│   └── testng.xml                      # TestNG suite configuration
+└── README.md                           # This file
+```
+
 ## Quick Start
 
 ### 1. Configure Mocks
@@ -20,7 +47,7 @@ Open Mock Runner tool window and add mock configurations (see test files for exa
 - Select "Run 'DubboServiceTest'"
 
 **Option C: Run from testng.xml**
-- Right-click on `testng.xml`
+- Right-click on `src/test/resources/testng.xml`
 - Select "Run 'testng.xml'"
 
 ## Test Structure

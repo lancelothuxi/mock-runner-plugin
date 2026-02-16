@@ -10,18 +10,20 @@ All tests are written using TestNG framework with proper assertions and test lif
 
 ```
 src/test/
-├── dubbo/
-│   ├── DubboOrderService.java          # Dubbo service interface
-│   ├── OrderDTO.java                   # Order data transfer object
-│   ├── CreateOrderRequest.java         # Request object
-│   └── DubboServiceTest.java           # TestNG test class
-├── feign/
-│   ├── FeignUserClient.java            # Feign client interface
-│   ├── UserResponse.java               # User response DTO
-│   ├── CreateUserRequest.java          # Create user request
-│   ├── UpdateUserRequest.java          # Update user request
-│   └── FeignClientTest.java            # TestNG test class
-└── testng.xml                          # TestNG suite configuration
+├── java/test/                          # Test source (Maven standard)
+│   ├── dubbo/
+│   │   ├── DubboOrderService.java      # Dubbo service interface
+│   │   ├── OrderDTO.java               # Order data transfer object
+│   │   ├── CreateOrderRequest.java     # Request object
+│   │   └── DubboServiceTest.java       # TestNG test class
+│   └── feign/
+│       ├── FeignUserClient.java        # Feign client interface
+│       ├── UserResponse.java           # User response DTO
+│       ├── CreateUserRequest.java      # Create user request
+│       ├── UpdateUserRequest.java      # Update user request
+│       └── FeignClientTest.java        # TestNG test class
+└── resources/                          # Test resources
+    └── testng.xml                      # TestNG suite configuration
 ```
 
 ## Running Tests
@@ -35,7 +37,7 @@ src/test/
 
 ### Method 2: Run Entire Test Suite
 
-1. Right-click on `src/test/testng.xml`
+1. Right-click on `src/test/resources/testng.xml`
 2. Select "Run 'testng.xml'"
 3. All tests will run in sequence
 

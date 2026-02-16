@@ -197,19 +197,21 @@ Potential additions:
 
 ```
 src/test/
-├── dubbo/
-│   ├── DubboOrderService.java       # Interface (50 lines)
-│   ├── OrderDTO.java                # DTO (100 lines)
-│   ├── CreateOrderRequest.java     # Request (120 lines)
-│   └── DubboServiceTest.java       # Tests (250 lines)
-├── feign/
-│   ├── FeignUserClient.java        # Interface (40 lines)
-│   ├── UserResponse.java           # DTO (80 lines)
-│   ├── CreateUserRequest.java      # Request (70 lines)
-│   ├── UpdateUserRequest.java      # Request (60 lines)
-│   └── FeignClientTest.java        # Tests (280 lines)
-├── testng.xml                       # Suite config (15 lines)
-└── README.md                        # Quick start (150 lines)
+├── java/test/                       # Test source (Maven standard)
+│   ├── dubbo/
+│   │   ├── DubboOrderService.java   # Interface (50 lines)
+│   │   ├── OrderDTO.java            # DTO (100 lines)
+│   │   ├── CreateOrderRequest.java  # Request (120 lines)
+│   │   └── DubboServiceTest.java    # Tests (250 lines)
+│   └── feign/
+│       ├── FeignUserClient.java     # Interface (40 lines)
+│       ├── UserResponse.java        # DTO (80 lines)
+│       ├── CreateUserRequest.java   # Request (70 lines)
+│       ├── UpdateUserRequest.java   # Request (60 lines)
+│       └── FeignClientTest.java     # Tests (280 lines)
+├── resources/
+│   └── testng.xml                   # Suite config (15 lines)
+└── README.md                        # Quick start (180 lines)
 
 docs/
 ├── TESTNG_GUIDE.md                  # Complete guide (400 lines)
