@@ -56,14 +56,19 @@ public class MockRunnerToolWindowContent {
         SwingUtilities.invokeLater(() -> {
             if (mockTable.getColumnCount() > 0) {
                 mockTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // Enabled
-                mockTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Class
-                mockTable.getColumnModel().getColumn(2).setPreferredWidth(150); // Method
-                mockTable.getColumnModel().getColumn(3).setPreferredWidth(150); // Args
-                mockTable.getColumnModel().getColumn(4).setPreferredWidth(300); // Return Value
+                mockTable.getColumnModel().getColumn(1).setPreferredWidth(150); // Class
+                mockTable.getColumnModel().getColumn(2).setPreferredWidth(120); // Method
+                mockTable.getColumnModel().getColumn(3).setPreferredWidth(120); // Args
+                mockTable.getColumnModel().getColumn(4).setPreferredWidth(100); // Mode
+                mockTable.getColumnModel().getColumn(5).setPreferredWidth(300); // Value
                 
-                // 设置JSON列的渲染器和编辑器
-                mockTable.getColumnModel().getColumn(4).setCellRenderer(new JsonTableCellRenderer());
-                mockTable.getColumnModel().getColumn(4).setCellEditor(new JsonTableCellEditor(project));
+                // 设置Mode列的下拉编辑器
+                JComboBox<String> modeCombo = new JComboBox<>(new String[]{"Return Value", "Exception"});
+                mockTable.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(modeCombo));
+                
+                // 设置Value列的渲染器和编辑器
+                mockTable.getColumnModel().getColumn(5).setCellRenderer(new JsonTableCellRenderer());
+                mockTable.getColumnModel().getColumn(5).setCellEditor(new JsonTableCellEditor(project));
             }
         });
         
@@ -277,87 +282,112 @@ public class MockRunnerToolWindowContent {
     }
     
     // 自定义表格模型
-    private class MockTableModel extends AbstractTableModel {
-        private final String[] columnNames = {"Enabled", "Class", "Method", "Args", "Return Value"};
-        private List<MockMethodConfig> mockMethods = new ArrayList<>();
-        
-        public void setMockMethods(List<MockMethodConfig> methods) {
-            this.mockMethods = new ArrayList<>(methods);
-            fireTableDataChanged();
-        }
-        
-        @Override
-        public int getRowCount() {
-            return mockMethods.size();
-        }
-        
-        @Override
-        public int getColumnCount() {
-            return columnNames.length;
-        }
-        
-        @Override
-        public String getColumnName(int column) {
-            return columnNames[column];
-        }
-        
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            if (columnIndex == 0) {
-                return Boolean.class;
+private class MockTableModel extends AbstractTableModel {
+            private final String[] columnNames = {"Enabled", "Class", "Method", "Args", "Mode", "Value"};
+            private List<MockMethodConfig> mockMethods = new ArrayList<>();
+
+            public void setMockMethods(List<MockMethodConfig> methods) {
+                this.mockMethods = new ArrayList<>(methods);
+                fireTableDataChanged();
             }
-            return String.class;
-        }
-        
-        @Override
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return columnIndex == 0 || columnIndex == 4; // Enabled列和Return Value列可编辑
-        }
-        
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            if (rowIndex >= mockMethods.size()) {
+
+            @Override
+            public int getRowCount() {
+                return mockMethods.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return columnNames.length;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return columnNames[column];
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0) {
+                    return Boolean.class;
+                }
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnIndex == 0 || columnIndex == 4 || columnIndex == 5; // Enabled, Mode, Value可编辑
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                if (rowIndex >= mockMethods.size()) {
+                    return null;
+                }
+
+                MockMethodConfig method = mockMethods.get(rowIndex);
+                switch (columnIndex) {
+                    case 0: return method.isEnabled();
+                    case 1: return method.getClassName().substring(method.getClassName().lastIndexOf('.') + 1);
+                    case 2: return method.getMethodName();
+                    case 3: return method.getSignature();
+                    case 4: return method.isThrowException() ? "Exception" : "Return Value";
+                    case 5: 
+                        if (method.isThrowException()) {
+                            return method.getExceptionType() + ": " + method.getExceptionMessage();
+                        } else {
+                            return method.getReturnValue();
+                        }
+                    default: return null;
+                }
+            }
+
+            @Override
+            public void setValueAt(Object value, int rowIndex, int columnIndex) {
+                if (rowIndex >= mockMethods.size()) {
+                    return;
+                }
+
+                MockMethodConfig method = mockMethods.get(rowIndex);
+
+                if (columnIndex == 0) {
+                    method.setEnabled((Boolean) value);
+                    fireTableCellUpdated(rowIndex, columnIndex);
+                    updateStats();
+                } else if (columnIndex == 4) {
+                    // Toggle mode between Return Value and Exception
+                    String mode = value.toString();
+                    boolean isException = mode.equals("Exception");
+                    method.setThrowException(isException);
+                    fireTableDataChanged(); // Refresh entire row to update Value column display
+                } else if (columnIndex == 5) {
+                    // Update value based on current mode
+                    if (method.isThrowException()) {
+                        // Parse exception info: "ExceptionType: message"
+                        String val = value.toString();
+                        if (val.contains(":")) {
+                            String[] parts = val.split(":", 2);
+                            method.setExceptionType(parts[0].trim());
+                            method.setExceptionMessage(parts.length > 1 ? parts[1].trim() : "Mocked exception");
+                        } else {
+                            method.setExceptionMessage(val);
+                        }
+                    } else {
+                        method.setReturnValue(value.toString());
+                    }
+                    fireTableCellUpdated(rowIndex, columnIndex);
+                }
+
+                // 保存到配置服务
+                MockConfigService service = MockConfigService.getInstance(project);
+                service.saveConfig();
+            }
+
+            public MockMethodConfig getMethodAt(int rowIndex) {
+                if (rowIndex >= 0 && rowIndex < mockMethods.size()) {
+                    return mockMethods.get(rowIndex);
+                }
                 return null;
             }
-            
-            MockMethodConfig method = mockMethods.get(rowIndex);
-            switch (columnIndex) {
-                case 0: return method.isEnabled();
-                case 1: return method.getClassName().substring(method.getClassName().lastIndexOf('.') + 1);
-                case 2: return method.getMethodName();
-                case 3: return method.getSignature();
-                case 4: return method.getReturnValue();
-                default: return null;
-            }
         }
-        
-        @Override
-        public void setValueAt(Object value, int rowIndex, int columnIndex) {
-            if (rowIndex >= mockMethods.size()) {
-                return;
-            }
-            
-            MockMethodConfig method = mockMethods.get(rowIndex);
-            
-            if (columnIndex == 0) {
-                method.setEnabled((Boolean) value);
-                fireTableCellUpdated(rowIndex, columnIndex);
-                updateStats();
-            } else if (columnIndex == 4) {
-                method.setReturnValue(value.toString());
-                fireTableCellUpdated(rowIndex, columnIndex);
-            }
-            
-            // 保存到配置服务
-            MockConfigService service = MockConfigService.getInstance(project);
-            service.saveConfig();
-        }
-        
-        public MockMethodConfig getMethodAt(int rowIndex) {
-            if (rowIndex >= 0 && rowIndex < mockMethods.size()) {
-                return mockMethods.get(rowIndex);
-            }
-            return null;
-        }
-    }
 }
