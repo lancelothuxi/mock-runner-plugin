@@ -48,16 +48,20 @@ public class MockRunnerToolWindowContent {
         mockTable = new JBTable(tableModel);
         mockTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         
-        // 设置列宽
-        mockTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // Enabled
-        mockTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Class
-        mockTable.getColumnModel().getColumn(2).setPreferredWidth(150); // Method
-        mockTable.getColumnModel().getColumn(3).setPreferredWidth(150); // Args
-        mockTable.getColumnModel().getColumn(4).setPreferredWidth(200); // Return Value
-        
         // 设置排序和过滤
         sorter = new TableRowSorter<>(tableModel);
         mockTable.setRowSorter(sorter);
+        
+        // 延迟设置列宽，确保表格已经初始化
+        SwingUtilities.invokeLater(() -> {
+            if (mockTable.getColumnCount() > 0) {
+                mockTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // Enabled
+                mockTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Class
+                mockTable.getColumnModel().getColumn(2).setPreferredWidth(150); // Method
+                mockTable.getColumnModel().getColumn(3).setPreferredWidth(150); // Args
+                mockTable.getColumnModel().getColumn(4).setPreferredWidth(200); // Return Value
+            }
+        });
         
         JBScrollPane scrollPane = new JBScrollPane(mockTable);
         contentPanel.add(scrollPane, BorderLayout.CENTER);
@@ -124,8 +128,13 @@ public class MockRunnerToolWindowContent {
         contentPanel.add(paginationPanel, BorderLayout.SOUTH);
         
         // 初始化数据
-        loadMockConfigs();
-        updatePaginationControls();
+        try {
+            loadMockConfigs();
+            updatePaginationControls();
+        } catch (Exception e) {
+            System.err.println("Error initializing MockRunnerToolWindowContent: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     
     public JPanel getContentPanel() {
@@ -226,22 +235,11 @@ public class MockRunnerToolWindowContent {
         SwingUtilities.invokeLater(() -> {
             System.out.println("[ToolWindow] addMockMethod called: " + className + "." + methodName);
             
-            MockMethodConfig methodConfig = new MockMethodConfig();
-            methodConfig.setClassName(className);
-            methodConfig.setMethodName(methodName);
-            methodConfig.setSignature(signature);
-            methodConfig.setReturnValue(returnValue);
-            methodConfig.setEnabled(true);
+            // 直接刷新UI，不要重复添加到配置中
+            // 配置的添加应该在MockConfigService中完成
+            refresh();
             
-            MockConfigService service = MockConfigService.getInstance(project);
-            MockConfig config = service.getConfig();
-            config.addMockMethod(methodConfig);
-            service.saveConfig();
-            
-            loadMockConfigs();
-            updatePaginationControls();
-            
-            System.out.println("[ToolWindow] Mock method added. Total count: " + tableModel.getRowCount());
+            System.out.println("[ToolWindow] Mock method refreshed. Total count: " + tableModel.getRowCount());
         });
     }
     

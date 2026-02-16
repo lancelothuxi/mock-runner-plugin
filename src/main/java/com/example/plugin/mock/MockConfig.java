@@ -31,6 +31,16 @@ public class MockConfig implements Serializable {
     }
 
     public void addMockMethod(MockMethodConfig methodConfig) {
+        // 检查是否已存在相同的方法配置
+        String methodKey = methodConfig.getClassName() + "." + methodConfig.getMethodName() + methodConfig.getSignature();
+        
+        // 移除已存在的相同配置
+        mockMethods.removeIf(existing -> {
+            String existingKey = existing.getClassName() + "." + existing.getMethodName() + existing.getSignature();
+            return existingKey.equals(methodKey);
+        });
+        
+        // 添加新配置
         mockMethods.add(methodConfig);
         
         // 同时添加到 mockRules，供 Agent 使用
@@ -73,18 +83,36 @@ public class MockConfig implements Serializable {
         return "java.lang.String";
     }
 
-    public void removeMockMethod(String className, String methodName) {
-        mockMethods.removeIf(m ->
-            m.getClassName().equals(className) && m.getMethodName().equals(methodName)
-        );
+    public void removeMockMethod(String className, String methodName, String signature) {
+        mockMethods.removeIf(m -> {
+            String methodKey = m.getClassName() + "." + m.getMethodName() + m.getSignature();
+            String targetKey = className + "." + methodName + signature;
+            return methodKey.equals(targetKey);
+        });
         
         // 同时从 mockRules 中删除
         String key = className + "." + methodName;
         mockRules.remove(key);
     }
+    
+    // 保留原有的方法以兼容现有代码
+    public void removeMockMethod(String className, String methodName) {
+        removeMockMethod(className, methodName, "");
+    }
 
     public List<MockMethodConfig> getMockMethods() {
         return mockMethods;
+    }
+    
+    /**
+     * 检查是否已存在相同的mock配置
+     */
+    public boolean hasMockMethod(String className, String methodName, String signature) {
+        String methodKey = className + "." + methodName + signature;
+        return mockMethods.stream().anyMatch(existing -> {
+            String existingKey = existing.getClassName() + "." + existing.getMethodName() + existing.getSignature();
+            return existingKey.equals(methodKey);
+        });
     }
 
     public void clearAll() {

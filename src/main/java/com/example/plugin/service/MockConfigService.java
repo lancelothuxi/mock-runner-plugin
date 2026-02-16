@@ -93,6 +93,11 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
     }
     
     public void addMockMethod(String className, String methodName, String signature, String returnValue) {
+        // 检查是否已存在相同的mock配置
+        if (mockConfig.hasMockMethod(className, methodName, signature)) {
+            LOG.info("Mock method already exists, updating: " + className + "." + methodName + signature);
+        }
+        
         MockMethodConfig methodConfig = new MockMethodConfig();
         methodConfig.setClassName(className);
         methodConfig.setMethodName(methodName);
@@ -101,7 +106,7 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
         
         mockConfig.addMockMethod(methodConfig);
         
-        LOG.info("Added mock: " + className + "." + methodName);
+        LOG.info("Added/Updated mock: " + className + "." + methodName + signature);
         
         // 确保 ToolWindow 可见
         com.intellij.openapi.wm.ToolWindowManager toolWindowManager = 
@@ -116,8 +121,8 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
         LOG.info("ToolWindow instance: " + toolWindowContent);
         
         if (toolWindowContent != null) {
-            toolWindowContent.addMockMethod(className, methodName, signature, returnValue);
-            LOG.info("Called addMockMethod on toolWindow");
+            toolWindowContent.refresh(); // 改为refresh而不是addMockMethod，避免重复添加
+            LOG.info("Refreshed toolWindow");
         } else {
             LOG.error("ToolWindow is null!");
         }
