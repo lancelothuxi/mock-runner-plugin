@@ -93,7 +93,7 @@ public class MockRunConfigurationExtension extends com.intellij.execution.RunCon
             // 方法1: 通过 PluginManager 获取插件路径
             com.intellij.ide.plugins.IdeaPluginDescriptor plugin = 
                 com.intellij.ide.plugins.PluginManagerCore.getPlugin(
-                    com.intellij.openapi.extensions.PluginId.getId("com.example.myplugin"));
+                    com.intellij.openapi.extensions.PluginId.getId("io.github.lancelothuxi.mock-runner"));
             
             if (plugin != null) {
                 java.nio.file.Path pluginPath = plugin.getPluginPath();
