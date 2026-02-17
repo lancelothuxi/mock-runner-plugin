@@ -66,8 +66,11 @@ public class MockAgent {
             .ignore(ElementMatchers.nameStartsWith("com.intellij."))
             .ignore(ElementMatchers.nameStartsWith("net.bytebuddy."))
             .ignore(ElementMatchers.nameStartsWith("com.google.gson."))
-            // Transform any class (including proxies) that might need mocking
-            .type(ElementMatchers.not(ElementMatchers.nameStartsWith("java.lang.")))
+            .ignore(ElementMatchers.nameStartsWith("kotlinx."))
+            .ignore(ElementMatchers.nameStartsWith("kotlin."))
+            .ignore(ElementMatchers.nameStartsWith("java."))
+            // Only transform test classes
+            .type(ElementMatchers.nameStartsWith("test."))
             .transform((builder, typeDescription, classLoader, module, protectionDomain) -> {
                 String className = typeDescription.getName();
                 
