@@ -86,7 +86,7 @@ tasks {
         
         manifest {
             attributes(
-                "Premain-Class" to "com.example.plugin.agent.MockAgent",
+                "Premain-Class" to "io.github.lancelothuxi.idea.plugin.mock.agent.MockAgent",
                 "Can-Redefine-Classes" to "true",
                 "Can-Retransform-Classes" to "true"
             )
