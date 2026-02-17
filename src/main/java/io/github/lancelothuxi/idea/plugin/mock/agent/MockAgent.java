@@ -49,9 +49,38 @@ public class MockAgent {
         }
         
         LOG.info("[MockAgent] Loaded " + mockConfig.getAllRules().size() + " mock rules");
+        
+        // Extract unique class names from mock rules
+        java.util.Set<String> classesToMock = new java.util.HashSet<>();
         for (Map.Entry<String, MockConfig.MockRule> entry : mockConfig.getAllRules().entrySet()) {
+            String key = entry.getKey();
             MockConfig.MockRule rule = entry.getValue();
-            LOG.info("[MockAgent]   - " + entry.getKey() + " -> " + rule.getReturnValue() + " (type: " + rule.getReturnType() + ")");
+            LOG.info("[MockAgent]   - " + key + " -> " + rule.getReturnValue() + " (type: " + rule.getReturnType() + ")");
+            
+            // Extract class name from "com.example.ClassName.methodName"
+            int lastDot = key.lastIndexOf('.');
+            if (lastDot > 0) {
+                String className = key.substring(0, lastDot);
+                classesToMock.add(className);
+            }
+        }
+        
+        LOG.info("[MockAgent] Classes to intercept: " + classesToMock);
+        
+        // Build type matcher for classes that have mock rules
+        net.bytebuddy.matcher.ElementMatcher.Junction<net.bytebuddy.description.type.TypeDescription> typeMatcher = null;
+        for (String className : classesToMock) {
+            if (typeMatcher == null) {
+                typeMatcher = ElementMatchers.named(className);
+            } else {
+                typeMatcher = typeMatcher.or(ElementMatchers.named(className));
+            }
+        }
+        
+        // If no classes to mock, don't install agent
+        if (typeMatcher == null) {
+            LOG.warning("[MockAgent] No classes to mock, agent not installed");
+            return;
         }
         
         new AgentBuilder.Default()
@@ -69,22 +98,10 @@ public class MockAgent {
             .ignore(ElementMatchers.nameStartsWith("kotlinx."))
             .ignore(ElementMatchers.nameStartsWith("kotlin."))
             .ignore(ElementMatchers.nameStartsWith("java."))
-            // Only transform test classes
-            .type(ElementMatchers.nameStartsWith("test."))
+            // Only transform classes that have mock rules configured
+            .type(typeMatcher)
             .transform((builder, typeDescription, classLoader, module, protectionDomain) -> {
                 String className = typeDescription.getName();
-                
-                // For proxies, check implemented interfaces
-                if (className.contains("$Proxy")) {
-                    for (var iface : typeDescription.getInterfaces()) {
-                        String ifaceName = iface.asErasure().getName();
-                        if (ifaceName.startsWith("test.")) {
-                            className = ifaceName;
-                            LOG.info("[MockAgent] Detected proxy for interface: " + className);
-                            break;
-                        }
-                    }
-                }
                 boolean isInterface = typeDescription.isInterface();
                 
                 for (Map.Entry<String, MockConfig.MockRule> entry : mockConfig.getAllRules().entrySet()) {
