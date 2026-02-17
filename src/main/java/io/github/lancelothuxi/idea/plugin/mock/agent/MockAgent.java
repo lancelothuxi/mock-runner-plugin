@@ -55,9 +55,33 @@ public class MockAgent {
         }
         
         new AgentBuilder.Default()
-            .type(ElementMatchers.any())
+            // Ignore Gradle, TestNG, and other framework classes
+            .ignore(ElementMatchers.nameStartsWith("org.gradle."))
+            .ignore(ElementMatchers.nameStartsWith("org.testng."))
+            .ignore(ElementMatchers.nameStartsWith("com.beust."))
+            .ignore(ElementMatchers.nameStartsWith("jdk."))
+            .ignore(ElementMatchers.nameStartsWith("sun."))
+            .ignore(ElementMatchers.nameStartsWith("javax."))
+            .ignore(ElementMatchers.nameStartsWith("com.sun."))
+            .ignore(ElementMatchers.nameStartsWith("com.intellij."))
+            .ignore(ElementMatchers.nameStartsWith("net.bytebuddy."))
+            .ignore(ElementMatchers.nameStartsWith("com.google.gson."))
+            // Transform any class (including proxies) that might need mocking
+            .type(ElementMatchers.not(ElementMatchers.nameStartsWith("java.lang.")))
             .transform((builder, typeDescription, classLoader, module, protectionDomain) -> {
                 String className = typeDescription.getName();
+                
+                // For proxies, check implemented interfaces
+                if (className.contains("$Proxy")) {
+                    for (var iface : typeDescription.getInterfaces()) {
+                        String ifaceName = iface.asErasure().getName();
+                        if (ifaceName.startsWith("test.")) {
+                            className = ifaceName;
+                            LOG.info("[MockAgent] Detected proxy for interface: " + className);
+                            break;
+                        }
+                    }
+                }
                 boolean isInterface = typeDescription.isInterface();
                 
                 for (Map.Entry<String, MockConfig.MockRule> entry : mockConfig.getAllRules().entrySet()) {
