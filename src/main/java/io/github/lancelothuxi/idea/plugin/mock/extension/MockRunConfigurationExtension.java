@@ -51,6 +51,9 @@ public class MockRunConfigurationExtension extends com.intellij.execution.RunCon
             
             LOG.info("Found " + mockConfig.getMockMethods().size() + " mock methods");
             
+            // 确保 mockRules 与 mockMethods 同步（UI 编辑只更新 mockMethods）
+            mockConfig.rebuildMockRules();
+
             // 保存 Mock 配置到临时文件
             File configFile = saveMockConfig(mockConfig);
             LOG.info("Mock config saved to: " + configFile.getAbsolutePath());

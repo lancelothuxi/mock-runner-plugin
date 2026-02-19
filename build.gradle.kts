@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("org.jetbrains.intellij") version "1.17.4"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "io.github.lancelothuxi"
@@ -18,10 +19,16 @@ repositories {
     mavenCentral()
 }
 
+// Separate configuration for agent dependencies that need shading
+val agentDeps: Configuration by configurations.creating
+
 dependencies {
     implementation("net.bytebuddy:byte-buddy:1.14.9")
     implementation("net.bytebuddy:byte-buddy-agent:1.14.9")
     implementation("com.google.code.gson:gson:2.10.1")
+
+    agentDeps("net.bytebuddy:byte-buddy:1.14.9")
+    agentDeps("com.google.code.gson:gson:2.10.1")
     
     // TestNG for testing
     testImplementation("org.testng:testng:7.8.0")
@@ -75,47 +82,58 @@ tasks {
     }
     
     // 创建 Agent JAR 任务
-    val agentJar by registering(Jar::class) {
+    val agentJar by registering(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class) {
         archiveBaseName.set("mock-agent")
         archiveClassifier.set("agent")
-        
+
         from(sourceSets.main.get().output)
-        
+
         // 包含依赖
-        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
-        
+        configurations = listOf(project.configurations.runtimeClasspath.get())
+
+        // Shade Gson to avoid conflicts with user's Gson
+        relocate("com.google.gson", "io.github.lancelothuxi.idea.plugin.mock.shaded.com.google.gson")
+
+        // Optionally shade ByteBuddy as well
+        relocate("net.bytebuddy", "io.github.lancelothuxi.idea.plugin.mock.shaded.net.bytebuddy")
+
         manifest {
             attributes(
-                "Premain-Class" to "io.github.lancelothuxi.idea.plugin.mock.agent.MockAgent",
-                "Can-Redefine-Classes" to "true",
-                "Can-Retransform-Classes" to "true"
+                mapOf(
+                    "Premain-Class" to "io.github.lancelothuxi.idea.plugin.mock.agent.MockAgent",
+                    "Can-Redefine-Classes" to "true",
+                    "Can-Retransform-Classes" to "true",
+                    "Implementation-Version" to project.version.toString(),
+                    "Built-At" to System.currentTimeMillis().toString()
+                )
             )
         }
-        
+
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
     
     // 确保在构建插件前先构建 agent jar
     prepareSandbox {
         dependsOn(agentJar)
-        
+
         // 将 agent jar 复制到插件目录
         from(agentJar) {
             into("${intellij.pluginName.get()}/lib")
         }
     }
-    
-    // 在 prepareSandbox 后自动更新 agent jar
-    named("prepareSandbox") {
-        doLast {
-            println("========================================")
-            println("正在用快速编译覆盖 agent jar...")
-            println("========================================")
-            exec {
-                commandLine("bash", "-c", "./scripts/ultra-fast-build.sh")
-            }
-        }
-    }
+
+    // 注释掉快速构建脚本，因为现在使用 Gradle Shadow 插件进行依赖遮蔽
+    // // 在 prepareSandbox 后自动更新 agent jar
+    // named("prepareSandbox") {
+    //     doLast {
+    //         println("========================================")
+    //         println("正在用快速编译覆盖 agent jar...")
+    //         println("========================================")
+    //         exec {
+    //             commandLine("bash", "-c", "./scripts/ultra-fast-build.sh")
+    //         }
+    //     }
+    // }
 }
 
 java {

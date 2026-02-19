@@ -21,18 +21,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MockAgent {
-    
+
     public static final Logger LOG = Logger.getLogger(MockAgent.class.getName());
-    public static MockConfig mockConfig;
+    public static volatile MockConfig mockConfig;
+    private static String configFilePath;
     
     public static void premain(String agentArgs, Instrumentation inst) {
         LOG.info("========================================");
         LOG.info("[MockAgent] Starting Mock Agent...");
+        try {
+            java.util.jar.Manifest mf = new java.util.jar.JarFile(
+                new java.io.File(MockAgent.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+            ).getManifest();
+            String version = mf.getMainAttributes().getValue("Implementation-Version");
+            String builtAt = mf.getMainAttributes().getValue("Built-At");
+            LOG.info("[MockAgent] Version: " + version + "  Built-At: " + builtAt);
+        } catch (Exception e) {
+            LOG.warning("[MockAgent] Could not read version from manifest: " + e.getMessage());
+        }
         LOG.info("[MockAgent] Agent args: " + agentArgs);
         LOG.info("========================================");
         
         if (agentArgs != null && !agentArgs.isEmpty()) {
+            configFilePath = agentArgs;
             loadMockConfig(agentArgs);
+            startConfigWatcher(agentArgs);
         } else {
             LOG.severe("[MockAgent] No config file path provided!");
         }
@@ -160,6 +173,34 @@ public class MockAgent {
     
     public static MockConfig getMockConfig() {
         return mockConfig;
+    }
+
+    private static void startConfigWatcher(String configPath) {
+        java.io.File configFile = new java.io.File(configPath);
+        Thread watcher = new Thread(() -> {
+            long lastModified = configFile.lastModified();
+            while (true) {
+                try {
+                    Thread.sleep(2000);
+                    long current = configFile.lastModified();
+                    if (current != lastModified) {
+                        lastModified = current;
+                        LOG.info("[MockAgent] Config file changed, reloading...");
+                        loadMockConfig(configPath);
+                        LOG.info("[MockAgent] Config reloaded, rules: " + mockConfig.getAllRules().size());
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (Exception e) {
+                    LOG.warning("[MockAgent] Error watching config file: " + e.getMessage());
+                }
+            }
+        });
+        watcher.setDaemon(true);
+        watcher.setName("mock-config-watcher");
+        watcher.start();
+        LOG.info("[MockAgent] Config watcher started, polling every 2s");
     }
     
     public static class Interceptor {

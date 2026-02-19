@@ -42,14 +42,20 @@ public class MockConfig implements Serializable {
         
         // 添加新配置
         mockMethods.add(methodConfig);
-        
+
         // 同时添加到 mockRules，供 Agent 使用
         // 使用配置中的 returnType，如果没有则推断
         String returnType = methodConfig.getReturnType();
         if (returnType == null || returnType.isEmpty()) {
             returnType = inferReturnType(methodConfig.getReturnValue());
         }
-        MockRule rule = new MockRule(methodConfig.getReturnValue(), returnType);
+        MockRule rule = new MockRule(
+            methodConfig.getReturnValue(),
+            returnType,
+            methodConfig.isThrowException(),
+            methodConfig.getExceptionType(),
+            methodConfig.getExceptionMessage()
+        );
         rule.setEnabled(methodConfig.isEnabled());
         addMockRule(methodConfig.getClassName(), methodConfig.getMethodName(), rule);
     }
@@ -67,11 +73,14 @@ public class MockConfig implements Serializable {
                 returnType = inferReturnType(methodConfig.getReturnValue());
             }
             System.out.println("[MockConfig] rebuildMockRules: " + methodConfig.getClassName() + "." + methodConfig.getMethodName() + " -> returnType: " + returnType);
-            MockRule rule = new MockRule(methodConfig.getReturnValue(), returnType);
+            MockRule rule = new MockRule(
+                methodConfig.getReturnValue(),
+                returnType,
+                methodConfig.isThrowException(),
+                methodConfig.getExceptionType(),
+                methodConfig.getExceptionMessage()
+            );
             rule.setEnabled(methodConfig.isEnabled());
-            rule.setThrowException(methodConfig.isThrowException());
-            rule.setExceptionType(methodConfig.getExceptionType());
-            rule.setExceptionMessage(methodConfig.getExceptionMessage());
             addMockRule(methodConfig.getClassName(), methodConfig.getMethodName(), rule);
         }
     }
@@ -147,6 +156,14 @@ public class MockConfig implements Serializable {
         public MockRule(String returnValue, String returnType) {
             this.returnValue = returnValue;
             this.returnType = returnType;
+        }
+
+        public MockRule(String returnValue, String returnType, boolean throwException, String exceptionType, String exceptionMessage) {
+            this.returnValue = returnValue;
+            this.returnType = returnType;
+            this.throwException = throwException;
+            this.exceptionType = exceptionType;
+            this.exceptionMessage = exceptionMessage;
         }
 
         public String getReturnValue() {

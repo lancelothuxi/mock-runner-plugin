@@ -39,8 +39,22 @@ public class MockConfigService implements PersistentStateComponent<MockConfigSer
     }
     
     public void saveConfig() {
-        // 触发状态保存
-        // IntelliJ会自动调用getState()来保存状态
+        // 同步写入临时配置文件，供 agent watcher 热重载
+        try {
+            java.io.File configFile = new java.io.File(
+                System.getProperty("java.io.tmpdir") + "/mock-runner/mock-config.json");
+            if (configFile.getParentFile() != null) {
+                configFile.getParentFile().mkdirs();
+            }
+            mockConfig.rebuildMockRules();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            try (java.io.FileWriter writer = new java.io.FileWriter(configFile)) {
+                gson.toJson(mockConfig, writer);
+            }
+            LOG.info("Config saved to: " + configFile.getAbsolutePath());
+        } catch (Exception e) {
+            LOG.error("Failed to save config to temp file: " + e.getMessage(), e);
+        }
     }
     
     // 持久化状态类
