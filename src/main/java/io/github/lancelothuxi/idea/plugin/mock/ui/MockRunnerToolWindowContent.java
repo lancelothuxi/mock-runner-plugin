@@ -38,6 +38,10 @@ public class MockRunnerToolWindowContent {
     // 全局enable/disable
     private boolean globalEnabled = true;
     private final JButton globalToggleButton;
+
+    // dirty 状态跟踪
+    private boolean dirty = false;
+    private final JButton saveButton;
     
     public MockRunnerToolWindowContent(Project project) {
         this.project = project;
@@ -102,15 +106,24 @@ public class MockRunnerToolWindowContent {
         
         // 工具栏
         JPanel toolbarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
+
+        saveButton = new JButton("Save");
+        saveButton.setEnabled(false);
+        saveButton.addActionListener(e -> {
+            MockConfigService svc = MockConfigService.getInstance(project);
+            svc.saveConfig();
+            clearDirty();
+        });
+
         JButton clearButton = new JButton("Clear All");
         clearButton.addActionListener(e -> clearAllWithConfirm());
-        
+
         JButton refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(e -> refresh());
-        
+
         statsLabel = new JLabel("Mock Methods: 0");
-        
+
+        toolbarPanel.add(saveButton);
         toolbarPanel.add(clearButton);
         toolbarPanel.add(refreshButton);
         toolbarPanel.add(Box.createHorizontalStrut(20));
@@ -177,20 +190,36 @@ public class MockRunnerToolWindowContent {
         for (MockMethodConfig method : config.getMockMethods()) {
             method.setEnabled(globalEnabled);
         }
-        
-        service.saveConfig();
+
+        markDirty();
         tableModel.fireTableDataChanged();
         updateStats();
     }
     
     private void clearAllWithConfirm() {
+        if (dirty) {
+            int save = Messages.showYesNoCancelDialog(
+                project,
+                "You have unsaved changes. Save before clearing?",
+                "Unsaved Changes",
+                "Save", "Discard", "Cancel",
+                Messages.getQuestionIcon()
+            );
+            if (save == Messages.YES) {
+                MockConfigService.getInstance(project).saveConfig();
+                clearDirty();
+            } else if (save == Messages.CANCEL) {
+                return;
+            }
+        }
+
         int result = Messages.showYesNoDialog(
             project,
             "Are you sure you want to clear all mock configurations?",
             "Confirm Clear All",
             Messages.getQuestionIcon()
         );
-        
+
         if (result == Messages.YES) {
             clearResults();
         }
@@ -257,13 +286,48 @@ public class MockRunnerToolWindowContent {
         MockConfigService service = MockConfigService.getInstance(project);
         service.getConfig().clearAll();
         service.saveConfig();
-        
+        clearDirty();
+
         loadMockConfigs();
         updatePaginationControls();
         updateStats();
     }
+
+    private void markDirty() {
+        dirty = true;
+        saveButton.setEnabled(true);
+        saveButton.setText("Save *");
+    }
+
+    private void clearDirty() {
+        dirty = false;
+        saveButton.setEnabled(false);
+        saveButton.setText("Save");
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
     
     public void refresh() {
+        if (dirty) {
+            int save = Messages.showYesNoCancelDialog(
+                project,
+                "You have unsaved changes. Save before refreshing?",
+                "Unsaved Changes",
+                "Save", "Discard", "Cancel",
+                Messages.getQuestionIcon()
+            );
+            if (save == Messages.YES) {
+                MockConfigService.getInstance(project).saveConfig();
+                clearDirty();
+            } else if (save == Messages.CANCEL) {
+                return;
+            } else {
+                clearDirty();
+            }
+        }
+
         loadMockConfigs();
         updatePaginationControls();
         updateStats();
@@ -370,9 +434,8 @@ private class MockTableModel extends AbstractTableModel {
                     fireTableCellUpdated(rowIndex, columnIndex);
                 }
 
-                // 保存到配置服务
-                MockConfigService service = MockConfigService.getInstance(project);
-                service.saveConfig();
+                // 标记为已修改
+                markDirty();
             }
 
             public MockMethodConfig getMethodAt(int rowIndex) {
