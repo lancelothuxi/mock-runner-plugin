@@ -8,7 +8,7 @@ echo ""
 
 # 1. 快速编译最新的 agent
 echo "1. 编译最新的 agent jar..."
-./ultra-fast-build.sh
+bash scripts/ultra-fast-build.sh
 
 echo ""
 echo "2. 启动 IntelliJ sandbox..."
@@ -58,7 +58,7 @@ fi
 echo ""
 echo "3. 重新编译 agent（覆盖 Gradle 版本）..."
 sleep 3  # 等待文件系统稳定
-./ultra-fast-build.sh
+bash scripts/ultra-fast-build.sh
 
 echo ""
 echo "=========================================="

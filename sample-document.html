@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+        }
+        .code {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            border-top: 1px solid #bdc3c7;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Technical Documentation</h1>
+    
+    <div class="section">
+        <h2>Project Overview</h2>
+        <p>This document provides technical specifications and guidelines for the Mock Runner Plugin project.</p>
+    </div>
+    
+    <div class="section">
+        <h2>Key Features</h2>
+        <ul>
+            <li>Runtime method mocking using Java Agent</li>
+            <li>Support for Dubbo and Feign interfaces</li>
+            <li>Real-time configuration updates</li>
+            <li>Kubernetes integration with sidecar pattern</li>
+            <li>Comprehensive logging and monitoring</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Technical Stack</h2>
+        <div class="code">
+// Core Dependencies
+implementation 'net.bytebuddy:byte-buddy:1.14.11'
+implementation 'com.google.code.gson:gson:2.10.1'
+implementation 'org.springframework.boot:spring-boot-starter'
+
+// Testing
+testImplementation 'org.testng:testng:7.8.0'
+testImplementation 'org.mockito:mockito-core:5.7.0'
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Architecture</h2>
+        <p>The system follows a modular architecture with clear separation of concerns:</p>
+        <ol>
+            <li><strong>Agent Layer</strong>: ByteBuddy-based method interception</li>
+            <li><strong>Configuration Layer</strong>: JSON-based mock rule management</li>
+            <li><strong>Integration Layer</strong>: Framework-specific interceptors</li>
+            <li><strong>Monitoring Layer</strong>: Real-time logging and metrics</li>
+        </ol>
+    </div>
+    
+    <div class="footer">
+        Generated on February 21, 2026<br>
+        Mock Runner Plugin v1.0.0
+    </div>
+</body>
+</html>

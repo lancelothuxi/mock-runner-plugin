@@ -10,8 +10,6 @@ import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import net.bytebuddy.matcher.ElementMatchers;
-import net.bytebuddy.description.type.TypeDescription;
-
 import java.io.FileReader;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
@@ -24,15 +22,14 @@ public class MockAgent {
 
     public static final Logger LOG = Logger.getLogger(MockAgent.class.getName());
     public static volatile MockConfig mockConfig;
-    private static String configFilePath;
     
     public static void premain(String agentArgs, Instrumentation inst) {
         LOG.info("========================================");
         LOG.info("[MockAgent] Starting Mock Agent...");
-        try {
-            java.util.jar.Manifest mf = new java.util.jar.JarFile(
+        try (java.util.jar.JarFile jarFile = new java.util.jar.JarFile(
                 new java.io.File(MockAgent.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-            ).getManifest();
+            )) {
+            java.util.jar.Manifest mf = jarFile.getManifest();
             String version = mf.getMainAttributes().getValue("Implementation-Version");
             String builtAt = mf.getMainAttributes().getValue("Built-At");
             LOG.info("[MockAgent] Version: " + version + "  Built-At: " + builtAt);
@@ -43,7 +40,6 @@ public class MockAgent {
         LOG.info("========================================");
         
         if (agentArgs != null && !agentArgs.isEmpty()) {
-            configFilePath = agentArgs;
             loadMockConfig(agentArgs);
             startConfigWatcher(agentArgs);
         } else {
