@@ -1,0 +1,54 @@
+<idea-plugin>
+    <id>io.github.lancelothuxi.mock-runner</id>
+    <name>Mock Runner</name>
+    <vendor email="lancelothuxi@gmail.com" url="https://github.com/lancelothuxi/mock-runner-plugin">Lancelot Huxi</vendor>
+    
+    <description><![CDATA[
+        Mock Runner - Runtime Method Mocking for IntelliJ IDEA
+        
+        A powerful plugin that enables runtime method mocking using Java Agent technology.
+        Mock any method's return value or exception without modifying your source code.
+        
+        Features:
+        - Runtime method mocking with Java Agent
+        - Full support for Dubbo and Feign interface-based RPC calls
+        - Visual configuration UI
+        - JSON editor for complex return values
+        - Exception mocking support
+        - Works with standard Run/Debug
+        - No code changes required
+    ]]></description>
+    
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- 自动为所有 Run/Debug 配置注入 Mock Agent -->
+        <runConfigurationExtension implementation="io.github.lancelothuxi.idea.plugin.mock.extension.MockRunConfigurationExtension"/>
+        
+        <!-- Mock Runner 工具窗口 -->
+        <toolWindow id="Mock Runner" 
+                    anchor="right" 
+                    factoryClass="io.github.lancelothuxi.idea.plugin.mock.ui.RunnerToolWindowFactory"
+                    icon="AllIcons.Actions.Execute"/>
+        
+        <!-- 服务 -->
+        <projectService serviceImplementation="io.github.lancelothuxi.idea.plugin.mock.ui.MockRunnerToolWindowContent"/>
+        <projectService serviceImplementation="io.github.lancelothuxi.idea.plugin.mock.service.MockConfigService"/>
+        
+        <!-- 代码标记 - 显示已 Mock 的方法 -->
+        <codeInsight.lineMarkerProvider 
+            language="JAVA" 
+            implementationClass="io.github.lancelothuxi.idea.plugin.mock.marker.MockedMethodLineMarkerProvider"/>
+    </extensions>
+    
+    <actions>
+        <!-- 添加右键菜单 -->
+        <action id="AddMockAction" 
+                class="io.github.lancelothuxi.idea.plugin.mock.action.AddMockAction" 
+                text="Add Mock for Method"
+                description="Add mock configuration for the selected method">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>

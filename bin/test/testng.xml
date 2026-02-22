@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Mock Runner Test Suite" verbose="1">
+    <listeners>
+        <listener class-name="test.MockTestListener"/>
+    </listeners>
+    
+    <test name="Dubbo Interface Mock Tests">
+        <classes>
+            <class name="test.dubbo.DubboServiceTest"/>
+        </classes>
+    </test>
+    
+    <test name="Feign Client Mock Tests">
+        <classes>
+            <class name="test.feign.FeignClientTest"/>
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- 戏剧面具图标 - 深色主题版本 -->
+  <defs>
+    <linearGradient id="maskGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#66BB6A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4CAF50;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 面具外轮廓 -->
+  <path d="M 8 2 C 4.5 2 2 4.5 2 7.5 C 2 9 2.5 10.5 3.5 11.5 L 4 12 L 4.5 11.5 C 5 11 5.5 10.8 6 10.8 C 6.5 10.8 7 11 7.5 11.5 L 8 12 L 8.5 11.5 C 9 11 9.5 10.8 10 10.8 C 10.5 10.8 11 11 11.5 11.5 L 12 12 L 12.5 11.5 C 13.5 10.5 14 9 14 7.5 C 14 4.5 11.5 2 8 2 Z" 
+        fill="url(#maskGradientDark)" stroke="#81C784" stroke-width="0.5"/>
+  
+  <!-- 左眼 -->
+  <path d="M 5 6.5 Q 5.5 7.5 6 6.5" fill="none" stroke="#E8F5E9" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- 右眼 -->
+  <path d="M 10 6.5 Q 10.5 7.5 11 6.5" fill="none" stroke="#E8F5E9" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- 微笑的嘴巴 -->
+  <path d="M 5.5 8.5 Q 8 10 10.5 8.5" fill="none" stroke="#E8F5E9" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- 装饰性的闪光点 -->
+  <circle cx="3.5" cy="4" r="0.8" fill="#A5D6A7" opacity="0.9"/>
+  <circle cx="12.5" cy="4" r="0.6" fill="#A5D6A7" opacity="0.7"/>
+</svg>
